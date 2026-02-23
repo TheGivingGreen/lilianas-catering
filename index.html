@@ -3,123 +3,133 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liliana's Master Catering Calculator</title>
+    <title>Liliana's Catering Assistant</title>
     <style>
         :root { --liliana-red: #a61e22; --liliana-green: #2e7d32; }
-        body { font-family: 'Helvetica Neue', sans-serif; background: #f8f8f8; color: #333; margin: 0; padding: 20px; }
-        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); overflow: hidden; border-top: 10px solid var(--liliana-red); }
-        .header { text-align: center; padding: 30px; background: #fff; }
-        .header h1 { margin: 0; color: var(--liliana-red); font-size: 28px; }
-        .menu-section { padding: 20px; border-bottom: 1px solid #eee; }
-        .menu-section h2 { color: var(--liliana-red); border-bottom: 2px solid #f4f4f4; padding-bottom: 5px; margin-top: 0; }
-        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px inset #fafafa; }
-        .item-info { flex-grow: 1; }
-        .item-name { font-weight: bold; }
-        .item-desc { font-size: 12px; color: #777; }
-        .qty-controls { display: flex; align-items: center; gap: 10px; }
-        input[type="number"] { width: 60px; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
-        .sticky-footer { position: sticky; bottom: 0; background: white; padding: 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-top: 3px solid var(--liliana-green); text-align: center; }
-        .total-price { font-size: 32px; color: var(--liliana-red); font-weight: bold; margin-bottom: 10px; }
-        .btn-order { background: var(--liliana-green); color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 30px; cursor: pointer; font-weight: bold; }
-        .btn-order:hover { background: #1b5e20; }
-        .disclaimer { font-size: 11px; color: #888; margin-top: 10px; }
+        body { font-family: 'Helvetica Neue', sans-serif; background: #fdfdfd; margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; border-top: 12px solid var(--liliana-red); }
+        
+        /* Brand Header */
+        .brand-header { text-align: center; padding: 40px 20px; background: white; }
+        .logo { max-width: 280px; height: auto; margin-bottom: 10px; }
+        
+        .menu-section { padding: 30px; border-bottom: 1px solid #eee; }
+        .section-title { color: var(--liliana-red); font-size: 24px; border-bottom: 2px solid var(--liliana-red); display: inline-block; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        
+        /* Grid for Food Photos */
+        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 600px) { .item-grid { grid-template-columns: 1fr; } }
+        
+        .food-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; transition: 0.3s; }
+        .food-card:hover { border-color: var(--liliana-red); }
+        .food-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background: #f0f0f0; }
+        
+        .item-name { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
+        .item-desc { font-size: 13px; color: #666; margin-bottom: 10px; flex-grow: 1; }
+        .price-tag { color: var(--liliana-red); font-weight: bold; margin-bottom: 10px; font-size: 16px; }
+        
+        .qty-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-size: 16px; }
+        
+        /* Bundle Selector Style */
+        .bundle-box { background: #fff8f8; padding: 20px; border-radius: 12px; border: 1px solid #f2d7d7; margin-bottom: 20px; }
+        select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd; font-size: 16px; margin-top: 10px; }
+
+        .sticky-footer { position: sticky; bottom: 0; background: white; border-top: 4px solid var(--liliana-green); padding: 20px; text-align: center; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); }
+        .total-amount { font-size: 36px; font-weight: bold; color: var(--liliana-red); margin-bottom: 10px; }
+        .btn-order { background: var(--liliana-green); color: white; border: none; padding: 15px 50px; border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-order:hover { background: #1b5e20; transform: scale(1.02); }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>Liliana's Italian Kitchen</h1>
-        <p>A-to-Z Catering Calculator</p>
+    <div class="brand-header">
+        <img src="https://raw.githubusercontent.com/TheGivingGreen/lilianas-catering/main/Lilnnas%20logoi.jpg" alt="Liliana's Italian Kitchen" class="logo">
+        <p style="font-style: italic; color: #555;">Delivery & Pick-Up Catering Menu Calculator</p>
     </div>
 
     <div class="menu-section">
-        <h2>1. Select a Bundle (Min 10)</h2>
-        <div class="item-row">
-            <div class="item-info">
-                <div class="item-name">Bundle Selection</div>
-                <div class="item-desc">Prices per person</div>
-            </div>
+        <h2 class="section-title">1. Select a Bundle</h2>
+        <div class="bundle-box">
+            <label style="font-weight: bold;">Choose your catering package (Min. 10 People):</label>
             <select id="bundleType" onchange="calculate()">
                 <option value="0">No Bundle (A La Carte Only)</option>
-                <option value="15">Bundle 1 ($15.00/pp)</option>
-                <option value="18">Bundle 2 ($18.00/pp)</option>
-                <option value="21">Bundle 3 ($21.00/pp)</option>
+                <option value="15">Bundle 1 ($15.00/pp) - Sandwich OR Pizza</option>
+                <option value="18">Bundle 2 ($18.00/pp) - Sandwich AND Pizza</option>
+                <option value="21">Bundle 3 ($21.00/pp) - Sandwich, Pizza, AND Pasta</option>
                 <option value="15">Box Lunch ($15.00/ea)</option>
             </select>
-        </div>
-        <div class="item-row">
-            <div class="item-info">
-                <div class="item-name">Number of People</div>
+            <div style="margin-top: 15px;">
+                <label style="font-weight: bold;">Number of Guests:</label>
+                <input type="number" id="guestCount" class="qty-input" value="0" min="0" onchange="calculate()" style="width: 100px; display: inline-block; margin-left: 10px;">
             </div>
-            <input type="number" id="guestCount" value="0" min="0" onchange="calculate()">
         </div>
     </div>
 
     <div class="menu-section">
-        <h2>2. Appetizers (Pans serve 25)</h2>
-        <div id="apps-list"></div>
+        <h2 class="section-title">2. Appetizers</h2>
+        <div class="item-grid" id="apps-list"></div>
     </div>
 
     <div class="menu-section">
-        <h2>3. Salads & Sides</h2>
-        <div id="salads-list"></div>
+        <h2 class="section-title">3. Salads & Sides</h2>
+        <div class="item-grid" id="salads-list"></div>
     </div>
 
     <div class="menu-section">
-        <h2>4. Pasta & Entrées</h2>
-        <div id="pasta-list"></div>
+        <h2 class="section-title">4. Pasta & Entrées</h2>
+        <div class="item-grid" id="pasta-list"></div>
     </div>
 
     <div class="menu-section">
-        <h2>5. Desserts</h2>
-        <div id="desserts-list"></div>
+        <h2 class="section-title">5. Desserts & Drinks</h2>
+        <div class="item-grid" id="extras-list"></div>
     </div>
 
     <div class="sticky-footer">
-        <div class="total-price" id="display-total">$0.00</div>
+        <div class="total-amount" id="display-total">$0.00</div>
         <button class="btn-order" onclick="requestQuote()">Email This Quote</button>
-        <div class="disclaimer">*Excludes tax and $25 min delivery fee. Packages serve 25 unless noted.</div>
+        <div style="font-size: 11px; color: #888; margin-top: 10px;">*Excludes tax and $25 min delivery fee. Packages serve 25 unless noted.</div>
     </div>
 </div>
 
 <script>
     const menuData = {
         apps: [
-            { name: "Large Antipasto Tray", price: 200, desc: "Seasonal favorites" },
-            { name: "Housemade Meatballs", price: 80, desc: "With meat sauce" },
-            { name: "Toasted Ravioli", price: 80, desc: "Full pan with sauce" },
-            { name: "Parmesan Lobster Rangoons", price: 80, desc: "Full pan" }
+            { name: "Large Antipasto Tray", price: 200, desc: "Tim's seasonal favorites! Serves 25.", img: "" },
+            { name: "Housemade Meatballs", price: 80, desc: "With meat sauce.", img: "" },
+            { name: "Toasted Ravioli", price: 80, desc: "Full pan with sauce.", img: "" },
+            { name: "Mini Garlic Tenderloin Sandwiches", price: 185, desc: "32 half sandwiches with horseradish.", img: "" }
         ],
         salads: [
-            { name: "House Salad", price: 80, desc: "Iceberg, provel, artichoke, peppers" },
-            { name: "Caesar Salad", price: 85, desc: "Romaine, croutons, parmesan" },
-            { name: "Goat Cheese Spinach Salad", price: 100, desc: "Strawberry, walnut, red onion" }
+            { name: "House Salad", price: 80, desc: "Iceberg, provel, artichoke, peppers.", img: "" },
+            { name: "Caesar Salad", price: 85, desc: "Romaine, croutons, parmesan.", img: "" },
+            { name: "Goat Cheese Spinach Salad", price: 100, desc: "Strawberry, walnut, raspberry vinaigrette.", img: "" }
         ],
         pasta: [
-            { name: "Lasagna (Feeds 20)", price: 125, desc: "Full pan" },
-            { name: "Rigatoni & Meatballs", price: 130, desc: "Full pan" },
-            { name: "Chicken Piccata", price: 125, desc: "With lemon butter" },
-            { name: "Garlic Rub Beef Tenderloins", price: 325, desc: "With horseradish" }
+            { name: "Lasagna (Feeds 20)", price: 125, desc: "Full pan. Layers of pasta, meat, and cheese.", img: "" },
+            { name: "Rigatoni & Meatballs", price: 130, desc: "Full pan with meat sauce.", img: "" },
+            { name: "Garlic Rub Beef Tenderloins", price: 325, desc: "With horseradish.", img: "" },
+            { name: "Chicken Piccata", price: 125, desc: "With lemon butter sauce.", img: "" }
         ],
-        desserts: [
-            { name: "Tiramisu (Full Pan)", price: 100, desc: "Feeds 25" },
-            { name: "Pumpkin Cheesecake", price: 100, desc: "Feeds 25" },
-            { name: "Cannoli", price: 3, desc: "Per piece" }
+        extras: [
+            { name: "Tiramisu (Full Pan)", price: 100, desc: "Feeds 25 people.", img: "" },
+            { name: "Cannoli", price: 3, desc: "Individual piece.", img: "" },
+            { name: "Assorted Sodas", price: 2, desc: "Coke products.", img: "" }
         ]
     };
 
     function renderMenu() {
         for (let cat in menuData) {
             const container = document.getElementById(`${cat}-list`);
-            menuData[cat].forEach((item, index) => {
+            menuData[cat].forEach(item => {
                 container.innerHTML += `
-                    <div class="item-row">
-                        <div class="item-info">
-                            <div class="item-name">${item.name}</div>
-                            <div class="item-desc">$${item.price} - ${item.desc}</div>
-                        </div>
-                        <input type="number" class="qty-input" data-price="${item.price}" data-name="${item.name}" value="0" min="0" onchange="calculate()">
+                    <div class="food-card">
+                        ${item.img ? `<img src="${item.img}" class="food-img">` : '<div class="food-img" style="display:flex; align-items:center; justify-content:center; color:#ccc;">Photo coming soon</div>'}
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                        <div class="price-tag">$${item.price.toFixed(2)}</div>
+                        <input type="number" class="qty-input menu-item" data-price="${item.price}" value="0" min="0" onchange="calculate()">
                     </div>`;
             });
         }
@@ -132,7 +142,7 @@
         
         total += (bundlePrice * guests);
 
-        document.querySelectorAll('.qty-input').forEach(input => {
+        document.querySelectorAll('.menu-item').forEach(input => {
             const qty = parseInt(input.value) || 0;
             const price = parseFloat(input.dataset.price);
             total += (qty * price);
