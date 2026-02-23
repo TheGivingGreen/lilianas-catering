@@ -1,168 +1,1150 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liliana's Catering Assistant</title>
-    <style>
-        :root { --liliana-red: #a61e22; --liliana-green: #2e7d32; }
-        body { font-family: 'Helvetica Neue', sans-serif; background: #fdfdfd; margin: 0; padding: 20px; }
-        .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; border-top: 12px solid var(--liliana-red); }
-        .brand-header { text-align: center; padding: 40px 20px; background: white; }
-        .logo { max-width: 280px; height: auto; margin-bottom: 10px; }
-        .top-info { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 20px; padding: 0 20px; text-align: center; }
-        .menu-section { padding: 30px; border-bottom: 1px solid #eee; }
-        .section-title { color: var(--liliana-red); font-size: 24px; border-bottom: 2px solid var(--liliana-red); display: inline-block; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 600px) { .item-grid { grid-template-columns: 1fr; } }
-        .food-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; transition: 0.3s; }
-        .food-card:hover { border-color: var(--liliana-red); }
-        .food-img { width: 100%; height: 180px; border-radius: 8px; margin-bottom: 10px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 14px; text-align: center; }
-        .item-name { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
-        .item-desc { font-size: 13px; color: #666; margin-bottom: 10px; flex-grow: 1; }
-        .price-tag { color: var(--liliana-red); font-weight: bold; margin-bottom: 10px; font-size: 16px; }
-        .qty-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-size: 16px; }
-        .bundle-box { background: #fff8f8; padding: 20px; border-radius: 12px; border: 1px solid #f2d7d7; margin-bottom: 20px; }
-        select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd; font-size: 16px; margin-top: 10px; }
-        .sticky-footer { position: sticky; bottom: 0; background: white; border-top: 4px solid var(--liliana-green); padding: 20px; text-align: center; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); }
-        .total-amount { font-size: 36px; font-weight: bold; color: var(--liliana-red); margin-bottom: 10px; }
-        .btn-order { background: var(--liliana-green); color: white; border: none; padding: 15px 50px; border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-    </style>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Liliana's Catering</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ─── TOKENS ─────────────────────────────────────── */
+    :root {
+      --red:       #a61e22;
+      --red-dark:  #7a1518;
+      --red-light: #f9eded;
+      --green:     #2e7d32;
+      --green-dk:  #1b5e20;
+      --cream:     #faf7f2;
+      --warm-gray: #f0ebe3;
+      --border:    #e4ddd4;
+      --text:      #1a1410;
+      --muted:     #7a6f65;
+      --white:     #ffffff;
+      --shadow-sm: 0 2px 8px rgba(0,0,0,.07);
+      --shadow-md: 0 8px 30px rgba(0,0,0,.12);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,.18);
+      --radius:    14px;
+      --font-serif: 'Cormorant Garamond', Georgia, serif;
+      --font-sans:  'DM Sans', sans-serif;
+    }
+
+    /* ─── RESET ──────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: var(--font-sans);
+      background: var(--cream);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 120px;
+    }
+
+    /* ─── HEADER ─────────────────────────────────────── */
+    .site-header {
+      background: var(--white);
+      border-bottom: 1px solid var(--border);
+      padding: 32px 20px 28px;
+      text-align: center;
+      position: relative;
+    }
+    .site-header::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 4px;
+      background: linear-gradient(90deg, var(--red) 0%, var(--red-dark) 50%, var(--green) 100%);
+    }
+    .logo-wrap img {
+      max-width: 220px;
+      height: auto;
+      display: block;
+      margin: 0 auto 16px;
+    }
+    .header-meta {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+    .header-meta strong { color: var(--text); font-weight: 600; }
+
+    /* ─── LAYOUT ─────────────────────────────────────── */
+    .page-wrap {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 0 16px;
+    }
+
+    /* ─── SECTION ────────────────────────────────────── */
+    .menu-section { margin-top: 40px; }
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+    .section-number {
+      width: 36px; height: 36px;
+      border-radius: 50%;
+      background: var(--red);
+      color: var(--white);
+      font-family: var(--font-serif);
+      font-size: 18px;
+      font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .section-title {
+      font-family: var(--font-serif);
+      font-size: 26px;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: .3px;
+    }
+    .section-note {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: -16px;
+      margin-bottom: 20px;
+      padding-left: 50px;
+    }
+
+    /* ─── BUNDLE BOX ─────────────────────────────────── */
+    .bundle-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 28px;
+      box-shadow: var(--shadow-sm);
+    }
+    .bundle-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+    @media (max-width: 560px) { .bundle-grid { grid-template-columns: 1fr; } }
+
+    .bundle-option {
+      border: 2px solid var(--border);
+      border-radius: 10px;
+      padding: 16px;
+      cursor: pointer;
+      transition: border-color .2s, background .2s, box-shadow .2s;
+    }
+    .bundle-option.active {
+      border-color: var(--red);
+      background: var(--red-light);
+      box-shadow: 0 0 0 3px rgba(166,30,34,.1);
+    }
+    .bundle-option input[type="radio"] { display: none; }
+    .bundle-name { font-weight: 600; font-size: 15px; margin-bottom: 4px; }
+    .bundle-price {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      color: var(--red);
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .bundle-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+    .bundle-controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 20px;
+      padding-top: 20px;
+      border-top: 1px solid var(--border);
+    }
+    .control-group { display: flex; flex-direction: column; gap: 6px; }
+    .control-label { font-size: 13px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+    .guest-input {
+      width: 120px;
+      padding: 10px 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 18px;
+      font-weight: 600;
+      text-align: center;
+      font-family: var(--font-serif);
+      transition: border-color .2s;
+      background: var(--white);
+    }
+    .guest-input:focus { outline: none; border-color: var(--red); }
+
+    .cannoli-toggle {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      padding: 10px 14px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      transition: border-color .2s, background .2s;
+      background: var(--white);
+      user-select: none;
+    }
+    .cannoli-toggle.active { border-color: var(--red); background: var(--red-light); }
+    .cannoli-toggle input { display: none; }
+    .toggle-dot {
+      width: 22px; height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      background: var(--white);
+      transition: background .2s, border-color .2s;
+      flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .cannoli-toggle.active .toggle-dot { background: var(--red); border-color: var(--red); }
+    .toggle-dot::after {
+      content: '✓';
+      color: white;
+      font-size: 11px;
+      opacity: 0;
+      transition: opacity .2s;
+    }
+    .cannoli-toggle.active .toggle-dot::after { opacity: 1; }
+    .cannoli-label { font-size: 14px; font-weight: 500; }
+    .cannoli-price { font-size: 12px; color: var(--muted); }
+
+    .warning { font-size: 12px; color: var(--red); margin-top: 4px; display: none; }
+
+    /* ─── FOOD GRID ──────────────────────────────────── */
+    .food-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .food-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      flex-direction: column;
+      transition: box-shadow .25s, transform .25s;
+    }
+    .food-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+
+    .food-photo {
+      width: 100%; height: 190px;
+      object-fit: cover;
+      display: block;
+    }
+    .photo-placeholder {
+      width: 100%; height: 190px;
+      background: linear-gradient(135deg, var(--warm-gray) 0%, var(--border) 100%);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 8px; color: var(--muted);
+    }
+    .photo-placeholder svg { opacity: .4; }
+    .photo-placeholder span { font-size: 12px; letter-spacing: .5px; text-transform: uppercase; }
+
+    .card-body { padding: 16px; flex: 1; display: flex; flex-direction: column; }
+    .card-name {
+      font-family: var(--font-serif);
+      font-size: 20px; font-weight: 700;
+      margin-bottom: 5px; line-height: 1.2;
+    }
+    .card-desc { font-size: 13px; color: var(--muted); flex: 1; line-height: 1.5; margin-bottom: 12px; }
+    .card-footer { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .card-price { font-family: var(--font-serif); font-size: 22px; font-weight: 700; color: var(--red); }
+
+    .qty-wrap {
+      display: flex; align-items: center;
+      border: 2px solid var(--border);
+      border-radius: 8px; overflow: hidden;
+      transition: border-color .2s;
+    }
+    .qty-wrap:focus-within { border-color: var(--red); }
+    .qty-btn {
+      width: 34px; height: 36px;
+      background: var(--warm-gray); border: none;
+      cursor: pointer; font-size: 18px; color: var(--text);
+      transition: background .15s;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qty-btn:hover { background: var(--border); }
+    .qty-num {
+      width: 44px; text-align: center; border: none;
+      font-size: 16px; font-weight: 600;
+      font-family: var(--font-sans); background: var(--white);
+      padding: 0; line-height: 36px;
+      -moz-appearance: textfield;
+    }
+    .qty-num::-webkit-outer-spin-button,
+    .qty-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+    .qty-num:focus { outline: none; }
+
+    /* ─── STICKY BAR ─────────────────────────────────── */
+    .sticky-bar {
+      position: fixed;
+      bottom: 0; left: 0; right: 0;
+      background: var(--white);
+      border-top: 3px solid var(--red);
+      padding: 14px 20px;
+      display: flex; align-items: center;
+      justify-content: space-between; gap: 16px;
+      box-shadow: 0 -8px 30px rgba(0,0,0,.12);
+      z-index: 100;
+    }
+    .bar-total-wrap { display: flex; flex-direction: column; }
+    .bar-label { font-size: 11px; text-transform: uppercase; letter-spacing: .7px; color: var(--muted); font-weight: 600; }
+    .bar-total { font-family: var(--font-serif); font-size: 34px; font-weight: 700; color: var(--red); line-height: 1; }
+    .bar-sub { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+    .btn-quote {
+      background: var(--green); color: var(--white);
+      border: none; padding: 14px 28px;
+      border-radius: 50px; font-family: var(--font-sans);
+      font-size: 16px; font-weight: 600; cursor: pointer;
+      transition: background .2s, transform .15s, box-shadow .2s;
+      white-space: nowrap;
+      box-shadow: 0 4px 14px rgba(46,125,50,.35);
+    }
+    .btn-quote:hover { background: var(--green-dk); transform: translateY(-1px); box-shadow: 0 6px 20px rgba(46,125,50,.4); }
+
+    /* ─── MODAL ──────────────────────────────────────── */
+    .modal-overlay {
+      position: fixed; inset: 0;
+      background: rgba(20,14,10,.6);
+      backdrop-filter: blur(4px);
+      z-index: 200;
+      display: flex; align-items: flex-end; justify-content: center;
+      opacity: 0; pointer-events: none;
+      transition: opacity .3s;
+    }
+    @media (min-width: 600px) { .modal-overlay { align-items: center; } }
+    .modal-overlay.open { opacity: 1; pointer-events: all; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 20px 20px 0 0;
+      width: 100%; max-width: 560px;
+      max-height: 85vh; overflow-y: auto;
+      transform: translateY(40px);
+      transition: transform .35s cubic-bezier(.16,1,.3,1);
+      box-shadow: var(--shadow-lg);
+    }
+    @media (min-width: 600px) { .modal { border-radius: 20px; transform: translateY(20px) scale(.97); } }
+    .modal-overlay.open .modal { transform: translateY(0) scale(1); }
+
+    .modal-header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 22px 24px 16px;
+      border-bottom: 1px solid var(--border);
+      position: sticky; top: 0; background: var(--white); z-index: 1;
+    }
+    .modal-title { font-family: var(--font-serif); font-size: 24px; font-weight: 700; }
+    .modal-close {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--warm-gray); border: none; cursor: pointer;
+      font-size: 16px; display: flex; align-items: center; justify-content: center;
+      transition: background .15s;
+    }
+    .modal-close:hover { background: var(--border); }
+
+    .modal-body { padding: 20px 24px; }
+
+    .quote-section { margin-bottom: 20px; }
+    .quote-section-label {
+      font-size: 11px; text-transform: uppercase; letter-spacing: .7px;
+      color: var(--muted); font-weight: 600; margin-bottom: 10px;
+    }
+    .quote-row {
+      display: flex; justify-content: space-between; align-items: baseline;
+      gap: 10px; padding: 7px 0;
+      border-bottom: 1px dashed var(--border); font-size: 14px;
+    }
+    .quote-row:last-child { border-bottom: none; }
+    .quote-row-name { flex: 1; color: var(--text); }
+    .quote-row-qty { color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .quote-row-price { font-weight: 600; color: var(--text); white-space: nowrap; }
+
+    .quote-divider { height: 1px; background: var(--border); margin: 16px 0; }
+    .quote-total-row { display: flex; justify-content: space-between; align-items: baseline; }
+    .quote-total-label { font-size: 16px; font-weight: 600; }
+    .quote-total-amount { font-family: var(--font-serif); font-size: 32px; font-weight: 700; color: var(--red); }
+    .quote-disclaimer { font-size: 11px; color: var(--muted); margin-top: 6px; text-align: right; }
+
+    .modal-footer {
+      padding: 16px 24px 24px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .btn-send {
+      background: var(--green); color: var(--white); border: none;
+      padding: 16px; border-radius: 50px;
+      font-size: 17px; font-weight: 600; cursor: pointer;
+      transition: background .2s; font-family: var(--font-sans);
+    }
+    .btn-send:hover { background: var(--green-dk); }
+    .btn-cancel {
+      background: none; border: none; font-size: 14px;
+      color: var(--muted); cursor: pointer; padding: 8px;
+      font-family: var(--font-sans);
+    }
+    .btn-cancel:hover { color: var(--text); }
+
+    .empty-order { text-align: center; padding: 30px 0; color: var(--muted); font-size: 15px; }
+
+    .page-divider { height: 1px; background: var(--border); margin: 40px 0 0; }
+
+    /* ─── SANDWICH TRAY ──────────────────────────────── */
+    .tray-section-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 20px;
+    }
+    .tray-section-header {
+      background: var(--red-light);
+      border-bottom: 1px solid #f2d7d7;
+      padding: 16px 22px;
+    }
+    .tray-section-name {
+      font-family: var(--font-serif);
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--red);
+      margin-bottom: 2px;
+    }
+    .tray-section-meta { font-size: 12px; color: var(--muted); }
+    .tray-includes-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    @media (max-width: 500px) { .tray-includes-grid { grid-template-columns: 1fr; } }
+    .tray-include-item {
+      padding: 14px 22px;
+      border-bottom: 1px dashed var(--border);
+      border-right: 1px dashed var(--border);
+    }
+    .tray-include-item:nth-child(even) { border-right: none; }
+    .tray-include-label { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .5px; color: var(--muted); margin-bottom: 3px; }
+    .tray-include-value { font-size: 14px; color: var(--text); line-height: 1.4; }
+    .tray-footer {
+      padding: 16px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+      background: var(--warm-gray);
+    }
+    .tray-price-block { display: flex; flex-direction: column; }
+    .tray-price { font-family: var(--font-serif); font-size: 26px; font-weight: 700; color: var(--red); line-height: 1; }
+    .tray-price-sub { font-size: 12px; color: var(--muted); margin-top: 3px; }
+    .assorted-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 24px;
+      box-shadow: var(--shadow-sm);
+    }
+    .assorted-title {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .assorted-meta { font-size: 13px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
+    .assorted-desc { font-size: 14px; color: var(--text); line-height: 1.6; margin-bottom: 16px; padding: 14px; background: var(--warm-gray); border-radius: 8px; }
+    .assorted-footer { display: flex; align-items: center; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+    .side-toggle {
+      display: flex; align-items: center; gap: 8px;
+      cursor: pointer;
+      padding: 8px 12px;
+      border: 2px solid var(--border);
+      border-radius: 8px;
+      font-size: 13px;
+      transition: border-color .2s, background .2s;
+      background: var(--white);
+      user-select: none;
+    }
+    .side-toggle.active { border-color: var(--red); background: var(--red-light); }
+    .side-toggle input { display: none; }
+
+    .modal::-webkit-scrollbar { width: 6px; }
+    .modal::-webkit-scrollbar-track { background: transparent; }
+    .modal::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  </style>
 </head>
 <body>
-<div class="container">
-    <div class="brand-header">
-        <img src="https://raw.githubusercontent.com/TheGivingGreen/lilianas-catering/main/Lilnnas%20logoi.jpg" alt="Liliana's Italian Kitchen" class="logo">
-        <div class="top-info">
-            <strong>Delivery & Pick-Up Catering Menu</strong><br>
-            Prices reflect portions that serve 25 people (unless stated).<br>
-            Delivery fees apply ($25 minimum). Tax not included.<br>
-            <em>Minimum of 10 people for Bundles.</em>
+
+<header class="site-header">
+  <div class="logo-wrap">
+    <img src="https://raw.githubusercontent.com/TheGivingGreen/lilianas-catering/main/Lilnnas%20logoi.jpg" alt="Liliana's Italian Kitchen" />
+  </div>
+  <div class="header-meta">
+    <strong style="font-size:15px;color:var(--text);display:block;margin-bottom:12px;">Delivery &amp; Pick-Up Catering Menu</strong>
+    <ul style="list-style:none;text-align:left;display:inline-block;margin:0 auto 12px;padding:0;line-height:2;">
+      <li>✦ Prices do not include tax</li>
+      <li>✦ Delivery fees apply for all deliveries ($25 minimum, price varies by location)</li>
+      <li>✦ Prices below reflect portions that serve 25 people (unless otherwise stated)</li>
+      <li>✦ Ask about half-pan pricing for parties of 12 or less</li>
+      <li>✦ Ask about full-service catering (staff for set-up, serving &amp; clean-up)</li>
+    </ul>
+    <div style="font-style:italic;color:var(--muted);margin-bottom:6px;">If you don't see something on this menu you are craving, let us know and we will see what we can do!</div>
+    <div style="font-size:12px;color:var(--muted);">Prices shown reflect portions that typically feed 25 people, but we can feed any size group. Other selections available upon request.</div>
+    <div style="margin-top:10px;"><a href="tel:3147505605" style="color:var(--red);font-weight:700;font-size:15px;text-decoration:none;">📞 Call to order: 314-750-5605</a></div>
+  </div>
+</header>
+
+<main class="page-wrap">
+
+  <!-- 1. BUNDLES -->
+  <section class="menu-section">
+    <div class="section-header">
+      <div class="section-number">1</div>
+      <h2 class="section-title">Bundles</h2>
+    </div>
+    <p class="section-note">Minimum 10 people · Includes salad &amp; bread choice</p>
+    <div class="bundle-card">
+      <div class="bundle-grid">
+        <label class="bundle-option active" id="opt-alacarte">
+          <input type="radio" name="bundle" value="0" checked onchange="onBundleChange(this)" />
+          <div class="bundle-name">A La Carte Only</div>
+          <div class="bundle-price">—</div>
+          <div class="bundle-desc">Build your own order from the sections below.</div>
+        </label>
+        <label class="bundle-option" id="opt-b1">
+          <input type="radio" name="bundle" value="15" onchange="onBundleChange(this)" />
+          <div class="bundle-name">Bundle 1</div>
+          <div class="bundle-price">$15 <span style="font-size:14px;font-weight:400;color:var(--muted)">/ person</span></div>
+          <div class="bundle-desc">Pick Sandwich OR Pizza. Sandwich choices: Meadow &amp; Beef Tenderloin (mix of half and half). Pizza: pick your toppings. Comes with salad (House or Caesar) &amp; app (Cheese Bread or Toasted Ravioli).</div>
+        </label>
+        <label class="bundle-option" id="opt-b2">
+          <input type="radio" name="bundle" value="18" onchange="onBundleChange(this)" />
+          <div class="bundle-name">Bundle 2</div>
+          <div class="bundle-price">$18 <span style="font-size:14px;font-weight:400;color:var(--muted)">/ person</span></div>
+          <div class="bundle-desc">Pick Sandwich AND Pizza. Sandwich choices: Meadow &amp; Beef Tenderloin (mix of half and half). Pizza: pick your toppings. Comes with salad (House or Caesar) &amp; app (Cheese Bread or Toasted Ravioli).</div>
+        </label>
+        <label class="bundle-option" id="opt-b3">
+          <input type="radio" name="bundle" value="21" onchange="onBundleChange(this)" />
+          <div class="bundle-name">Bundle 3</div>
+          <div class="bundle-price">$21 <span style="font-size:14px;font-weight:400;color:var(--muted)">/ person</span></div>
+          <div class="bundle-desc">Pick Sandwich, Pizza AND Pasta. Sandwich choices: Meadow &amp; Beef Tenderloin (mix of half and half). Pizza: pick your toppings. Pasta: Rigatoni in meat sauce, tomato basil or cream sauce. Comes with salad (House or Caesar) &amp; app (Cheese Bread or Toasted Ravioli).</div>
+        </label>
+      </div>
+
+      <div class="bundle-controls">
+        <div class="control-group">
+          <span class="control-label">Guests</span>
+          <input type="number" id="guestCount" class="guest-input" value="0" min="0" oninput="calculate()" />
+          <span class="warning" id="guestWarning">⚠ Bundles require a minimum of 10 guests.</span>
         </div>
-    </div>
-
-    <div class="menu-section">
-        <h2 class="section-title">1. Bundles (Min. 10 People)</h2>
-        <div class="bundle-box">
-            <label style="font-weight: bold;">Select Your Bundle:</label>
-            <select id="bundleType" onchange="calculate()">
-                <option value="0" data-desc="">A La Carte Only</option>
-                <option value="15" data-desc="Pick Sandwich OR Pizza. (Sandwich: Meadow & Beef Tenderloin mix). Choice of House/Caesar salad & Cheese Bread/Toasted Ravioli.">Bundle 1 ($15.00/pp)</option>
-                <option value="18" data-desc="Pick Sandwich AND Pizza. (Sandwich: Meadow & Beef Tenderloin mix). Choice of House/Caesar salad & Cheese Bread/Toasted Ravioli.">Bundle 2 ($18.00/pp)</option>
-                <option value="21" data-desc="Pick Sandwich, Pizza, AND Pasta. (Sandwich: Meadow & Beef Tenderloin mix). Choice of House/Caesar salad & Cheese Bread/Toasted Ravioli. Pasta: Meat, Tomato Basil, or Cream sauce.">Bundle 3 ($21.00/pp)</option>
-            </select>
-            <div id="bundleDetail" style="font-size: 12px; color: #666; margin-top: 5px; font-style: italic;"></div>
-            
-            <div style="margin-top: 15px;">
-                <label style="font-weight: bold;">Number of Guests:</label>
-                <input type="number" id="guestCount" class="qty-input" value="0" min="0" onchange="calculate()" style="width: 100px; display: inline-block;">
+        <div class="control-group">
+          <span class="control-label">Add-On</span>
+          <div class="cannoli-toggle" id="cannoli-toggle" onclick="toggleCannoli()">
+            <input type="checkbox" id="addCannolis" />
+            <div class="toggle-dot"></div>
+            <div>
+              <div class="cannoli-label">2 Cannolis / person</div>
+              <div class="cannoli-price">+$2.50 per person</div>
             </div>
-            
-            <div style="margin-top: 10px;">
-                <input type="checkbox" id="addCannolis" onchange="calculate()"> 
-                <label for="addCannolis" style="font-size: 14px;">Add (2) Cannolis per person (+$2.50/pp)</label>
-            </div>
+          </div>
         </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">2</div><h2 class="section-title">Box Lunches</h2></div>
+    <p class="section-note">$15 each · Min. 10 · Includes side (chips or Italian pasta salad) &amp; cookie (or 2 cannolis +$1.00) · Add bottled soda or water +$1.50</p>
+    <div class="food-grid" id="grid-box-lunches"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">3</div><h2 class="section-title">Appetizers</h2></div>
+    <div class="food-grid" id="grid-apps"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">4</div><h2 class="section-title">Salads &amp; Sides</h2></div>
+    <div class="food-grid" id="grid-salads"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">5</div><h2 class="section-title">Pasta</h2></div>
+    <p class="section-note">All pasta served with Italian garlic bread · Full pan serves 25 unless noted</p>
+    <div class="food-grid" id="grid-pasta"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">6</div><h2 class="section-title">Entrées</h2></div>
+    <div class="food-grid" id="grid-entrees"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">7</div><h2 class="section-title">Desserts</h2></div>
+    <p class="section-note">All house made · Other selections available upon request</p>
+    <div class="food-grid" id="grid-desserts"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">8</div><h2 class="section-title">Drinks</h2></div>
+    <p class="section-note">Coke products · Tea, coffee, juice and ice available upon request</p>
+    <div class="food-grid" id="grid-drinks"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <section class="menu-section">
+    <div class="section-header"><div class="section-number">9</div><h2 class="section-title">Add-Ons</h2></div>
+    <div class="food-grid" id="grid-addons"></div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <!-- 8. SANDWICH TRAYS -->
+  <section class="menu-section">
+    <div class="section-header">
+      <div class="section-number">10</div>
+      <h2 class="section-title">Sandwich Trays</h2>
+    </div>
+    <p class="section-note">$15 per person + tax · Minimum 25 people · Create your own!</p>
+
+    <!-- Sandwich Tray -->
+    <div class="tray-section-card">
+      <div class="tray-section-header">
+        <div class="tray-section-name">Build-Your-Own Sandwich Tray</div>
+        <div class="tray-section-meta">Everything included — mix and match to build your spread</div>
+      </div>
+      <div class="tray-includes-grid">
+        <div class="tray-include-item">
+          <div class="tray-include-label">Meats (Tray)</div>
+          <div class="tray-include-value">Roasted Beef, Roasted Turkey, Roasted Pastrami</div>
+        </div>
+        <div class="tray-include-item">
+          <div class="tray-include-label">Sauces</div>
+          <div class="tray-include-value">Garlic Mayo, Spicy Aioli, Horseradish</div>
+        </div>
+        <div class="tray-include-item">
+          <div class="tray-include-label">Bread (Tray)</div>
+          <div class="tray-include-value">Seeded Hoagie, Ciabatta</div>
+        </div>
+        <div class="tray-include-item">
+          <div class="tray-include-label">Beverages</div>
+          <div class="tray-include-value">Bottled Water &amp; Bottled Soda</div>
+        </div>
+        <div class="tray-include-item">
+          <div class="tray-include-label">Cheese &amp; Condiments (Tray)</div>
+          <div class="tray-include-value">Assorted Cheeses and Condiments</div>
+        </div>
+        <div class="tray-include-item">
+          <div class="tray-include-label">Sides</div>
+          <div class="tray-include-value">Italian Pasta Salad, House Salad</div>
+        </div>
+      </div>
+      <div class="tray-footer">
+        <div class="tray-price-block">
+          <span class="tray-price">$15<span style="font-size:16px;font-weight:400;color:var(--muted)">/person</span></span>
+          <span class="tray-price-sub">+ tax · Min. 25 people</span>
+        </div>
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="adjustQty('sandwich-tray',0,-1)">−</button>
+          <input class="qty-num" type="number" id="qty-sandwich-tray-0" value="0" min="0"
+            data-price="15" data-name="Build-Your-Own Sandwich Tray" data-cat="sandwich-tray"
+            oninput="calculate()" />
+          <button class="qty-btn" onclick="adjustQty('sandwich-tray',0,1)">+</button>
+        </div>
+      </div>
     </div>
 
-    <div class="menu-section">
-        <h2 class="section-title">2. Box Lunches ($15ea, Min. 10)</h2>
-        <p style="font-size: 13px; margin-bottom: 15px;">Includes side (chips or pasta salad) and cookie.</p>
-        <div class="item-grid" id="box-lunches"></div>
+    <!-- Assorted Sandwiches -->
+    <div class="assorted-card">
+      <div class="assorted-title">Assorted Sandwiches</div>
+      <div class="assorted-meta">
+        $15 per person + tax &nbsp;·&nbsp; Minimum 25 people<br>
+        Add side (chips or Italian pasta salad) +$1.50/person
+      </div>
+      <div class="assorted-desc">
+        Assortment of Roasted Beef, Roasted Turkey &amp; Pastrami — comes with provolone, roasted red peppers, arugula, and choice of sauces.
+      </div>
+      <div class="assorted-footer">
+        <div style="display:flex;flex-direction:column;gap:8px;">
+          <div class="tray-price-block">
+            <span class="tray-price">$15<span style="font-size:16px;font-weight:400;color:var(--muted)">/person</span></span>
+            <span class="tray-price-sub">+ tax · Min. 25 people</span>
+          </div>
+          <label class="side-toggle" id="assorted-side-toggle" onclick="toggleAssortedSide()">
+            <input type="checkbox" id="assortedSide" />
+            <div class="toggle-dot"></div>
+            <span>Add side +$1.50/person</span>
+          </label>
+        </div>
+        <div class="qty-wrap">
+          <button class="qty-btn" onclick="adjustQty('sandwich-tray',1,-1)">−</button>
+          <input class="qty-num" type="number" id="qty-sandwich-tray-1" value="0" min="0"
+            data-price="15" data-name="Assorted Sandwiches" data-cat="sandwich-tray"
+            oninput="calculate()" />
+          <button class="qty-btn" onclick="adjustQty('sandwich-tray',1,1)">+</button>
+        </div>
+      </div>
     </div>
+  </section>
 
-    <div class="menu-section"><h2 class="section-title">3. Appetizers</h2><div class="item-grid" id="apps"></div></div>
+  <div class="page-divider"></div>
 
-    <div class="menu-section"><h2 class="section-title">4. Salads & Sides</h2><div class="item-grid" id="salads-sides"></div></div>
-
-    <div class="menu-section"><h2 class="section-title">5. Pasta (Includes Garlic Bread)</h2><div class="item-grid" id="pastas"></div></div>
-
-    <div class="menu-section"><h2 class="section-title">6. Entrées</h2><div class="item-grid" id="entrees"></div></div>
-
-    <div class="menu-section"><h2 class="section-title">7. Desserts, Drinks & Add-Ons</h2><div class="item-grid" id="extras"></div></div>
-
-    <div class="sticky-footer">
-        <div class="total-amount" id="display-total">$0.00</div>
-        <button class="btn-order" onclick="requestQuote()">Email Quote Request</button>
-        <p style="font-size: 11px; color: #888; margin-top: 10px;">*Delivery fees vary by location ($25 min).</p>
+  <!-- BANQUET NOTE -->
+  <section class="menu-section">
+    <div style="background:var(--red-light);border:1px solid #f2d7d7;border-radius:var(--radius);padding:22px 28px;text-align:center;">
+      <div style="font-family:var(--font-serif);font-size:20px;font-weight:700;color:var(--red);margin-bottom:8px;">NOTE: All Banquet Items Available Upon Request</div>
+      <div style="font-size:13px;color:var(--muted);line-height:1.8;">Servers &nbsp;·&nbsp; Bartenders &nbsp;·&nbsp; Tables &nbsp;·&nbsp; Chairs &nbsp;·&nbsp; Linens &nbsp;·&nbsp; Chafing Dishes &nbsp;·&nbsp; Utensils &nbsp;·&nbsp; DJ Service &nbsp;·&nbsp; Assortment of Live Music Selections &nbsp;·&nbsp; Photographers</div>
     </div>
+  </section>
+
+  <div class="page-divider"></div>
+
+  <!-- LOCATIONS -->
+  <section class="menu-section" style="margin-bottom:20px;">
+    <div class="section-header" style="margin-bottom:20px;">
+      <h2 class="section-title" style="font-size:22px;">Our Locations</h2>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);">
+        <div style="font-family:var(--font-serif);font-size:20px;font-weight:700;margin-bottom:4px;">South County</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">11836 Tesson Ferry Rd, Saint Louis, MO 63128</div>
+        <a href="tel:3147291800" style="color:var(--red);font-weight:700;font-size:14px;text-decoration:none;">📞 (314) 729-1800</a>
+        <div style="margin-top:14px;font-size:13px;line-height:2;color:var(--text);">
+          <strong style="display:block;margin-bottom:4px;text-transform:uppercase;font-size:11px;letter-spacing:.5px;color:var(--muted);">Hours</strong>
+          Mon: 11 AM – 8 PM<br>
+          Tues – Thurs: 11 AM – 9 PM<br>
+          Fri &amp; Sat: 11 AM – 10 PM<br>
+          Sun: 11 AM – 8 PM
+        </div>
+      </div>
+      <div style="background:var(--white);border:1px solid var(--border);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-sm);">
+        <div style="font-family:var(--font-serif);font-size:20px;font-weight:700;margin-bottom:4px;">Cottleville</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:12px;">3891 Mid Rivers Mall Dr, Cottleville, MO 63376</div>
+        <a href="tel:6364776650" style="color:var(--red);font-weight:700;font-size:14px;text-decoration:none;">📞 (636) 477-6650</a>
+        <div style="margin-top:14px;font-size:13px;line-height:2;color:var(--text);">
+          <strong style="display:block;margin-bottom:4px;text-transform:uppercase;font-size:11px;letter-spacing:.5px;color:var(--muted);">Dining Room / Patio</strong>
+          Mon – Thurs: 3 PM – 9 PM<br>
+          Fri: 3 PM – 10 PM<br>
+          Sat: 11 AM – 10 PM<br>
+          Sun: 11 AM – 8 PM
+          <div style="margin-top:8px;"><strong style="font-size:11px;text-transform:uppercase;letter-spacing:.5px;color:var(--muted);">Bar Area</strong><br>Tues – Sun: 11 AM – close</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- STICKY BAR -->
+<div class="sticky-bar">
+  <div class="bar-total-wrap">
+    <span class="bar-label">Estimated Total</span>
+    <span class="bar-total" id="display-total">$0.00</span>
+    <span class="bar-sub">+ delivery &amp; tax</span>
+  </div>
+  <button class="btn-quote" onclick="openModal()">Review &amp; Send Quote →</button>
+</div>
+
+<!-- QUOTE MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal">
+    <div class="modal-header">
+      <span class="modal-title">Quote Summary</span>
+      <button class="modal-close" onclick="closeModal()">✕</button>
+    </div>
+    <div class="modal-body" id="modal-body"></div>
+    <div class="modal-footer">
+      <button class="btn-send" onclick="sendQuote()">Send Quote via Email</button>
+      <button class="btn-cancel" onclick="closeModal()">← Go back and edit</button>
+    </div>
+  </div>
 </div>
 
 <script>
-    const menuData = {
-        "box-lunches": [
-            { name: "Famous Beef Tenderloin", price: 18, desc: "Garlic tenderloin, red peppers, arugula, horsey mayo. (+$3 upcharge)" },
-            { name: "Paulie", price: 15, desc: "Roast beef, provel, au jus, garlic mayo, ciabatta." },
-            { name: "The Tony", price: 15, desc: "Roast beef, bacon, cheddar, spicy aioli, ciabatta." },
-            { name: "Furio", price: 15, desc: "Roast beef, giardiniera, red peppers, mozzarella, horseradish mayo." },
-            { name: "Meadow", price: 15, desc: "Turkey, provolone, lettuce, tomato, garlic mayo." }
-        ],
-        "apps": [
-            { name: "Large Antipasto Tray", price: 200, desc: "Tim's seasonal favorites." },
-            { name: "Italian Bruschetta", price: 80, desc: "Goat cheese, prosciutto, arugula & tomato." },
-            { name: "Housemade Meatballs", price: 80, desc: "With meat sauce." },
-            { name: "Mini Garlic Tenderloin Sandwiches", price: 185, desc: "32 half sandwiches." }
-        ],
-        "salads-sides": [
-            { name: "House Salad", price: 80, desc: "Artichoke, red peppers, zesty Italian." },
-            { name: "Goat Cheese Spinach Salad", price: 100, desc: "Strawberries, walnuts, raspberry vinaigrette." },
-            { name: "Caesar Salad", price: 85, desc: "Romaine, croutons, mayfair dressing." }
-        ],
-        "pastas": [
-            { name: "Lasagna", price: 125, desc: "Feeds 20 people." },
-            { name: "Pasta Con Broccoli", price: 90, desc: "Full pan." },
-            { name: "Rigatoni & Meatballs", price: 130, desc: "Full pan." }
-        ],
-        "entrees": [
-            { name: "Chicken Piccata", price: 125, desc: "Lemon butter sauce." },
-            { name: "Chicken Spiedini", price: 140, desc: "Garlic cream sauce." },
-            { name: "Garlic Rub Beef Tenderloins", price: 325, desc: "With horseradish." }
-        ],
-        "extras": [
-            { name: "Tiramisu (Full Pan)", price: 100, desc: "Feeds 25." },
-            { name: "Assorted Soda", price: 2.00, desc: "Coke products." },
-            { name: "Bottled Water", price: 2.00, desc: "Per each." },
-            { name: "Serving Utensils", price: 1.50, desc: "Plastic." }
-        ]
-    };
+  // ─────────────────────────────────────────────────────────
+  // MENU DATA
+  // To add a food photo, set the "photo" field to the raw GitHub URL:
+  // "https://raw.githubusercontent.com/TheGivingGreen/lilianas-catering/main/YOUR-FILE.jpg"
+  // Leave as "" to show the placeholder.
+  // ─────────────────────────────────────────────────────────
+  const MENU = {
+    "box-lunches": {
+      label: "Box Lunches",
+      items: [
+        { name: "Famous Beef Tenderloin", price: 18, desc: "Shaved center cut garlic tenderloin, roasted red peppers, arugula, horsey mayo on cheese garlic bread. (+$3 per box)",                    photo: "" },
+        { name: "Paulie",                 price: 15, desc: "Roasted beef, provel, dipped in au jus, garlic mayo, ciabatta.",                                                                           photo: "" },
+        { name: "The Tony",               price: 15, desc: "Roasted beef, crispy bacon, sharp cheddar, lettuce, tomato, spicy aioli, ciabatta roll.",                                                  photo: "" },
+        { name: "Furio",                  price: 15, desc: "Roasted beef, giardiniera, roasted red peppers, Italian seasoning, mozzarella, horseradish mayo, red onion, seeded hoagie.",               photo: "" },
+        { name: "Meadow",                 price: 15, desc: "Roasted turkey, provolone, lettuce, tomato, garlic mayo, seeded hoagie.",                                                                  photo: "" },
+        { name: "Adriana",                price: 15, desc: "Roasted turkey, pastrami, crispy bacon, onion, provolone, lettuce, tomato, salsa verde, ciabatta.",                                        photo: "" },
+        { name: "Caramela",               price: 15, desc: "Pressed roasted turkey, crispy bacon, fontina, provel, spicy aioli, seeded hoagie.",                                                       photo: "" },
+        { name: "Christopher",            price: 15, desc: "Pressed pastrami, swiss, garlic mayo, seeded hoagie.",                                                                                     photo: "" },
+        { name: "Caesar Salad",           price: 15, desc: "Romaine hearts, housemade croutons, white anchovies, parmesan, mayfair dressing. All salads come with roasted chicken.",                  photo: "" },
+        { name: "Goat Cheese Spinach Salad", price: 15, desc: "Spinach, goat cheese, strawberries, spicy walnuts, red onions, raspberry vinaigrette. All salads come with roasted chicken.",          photo: "" },
+        { name: "House Salad",            price: 15, desc: "Iceberg, provel cheese, artichoke hearts, roasted red peppers, housemade croutons, parmesan, sweet zesty Italian. All salads come with roasted chicken.", photo: "" }
+      ]
+    },
+    "apps": {
+      label: "Appetizers",
+      items: [
+        { name: "Large Antipasto Tray",              price: 200, desc: "Tim's seasonal favorites! Ask us for details.",                        photo: "" },
+        { name: "Italian Bruschetta",                price: 80,  desc: "Goat cheese, prosciutto, arugula & tomato topping.",                   photo: "" },
+        { name: "Housemade Meatballs",               price: 80,  desc: "With meat sauce.",                                                      photo: "" },
+        { name: "Crispy Parmesan Wings",             price: 80,  desc: "Full pan.",                                                             photo: "" },
+        { name: "Prosciutto Wrapped Asparagus",      price: 100, desc: "Full pan.",                                                             photo: "" },
+        { name: "Prosciutto Wrapped Jumbo Shrimp",   price: 175, desc: "Full pan.",                                                             photo: "" },
+        { name: "Fried Artichokes",                  price: 80,  desc: "With sauce, full pan.",                                                 photo: "" },
+        { name: "Toasted Ravioli",                   price: 80,  desc: "With sauce, full pan.",                                                 photo: "" },
+        { name: "Parmesan Lobster Rangoons",         price: 80,  desc: "With spicy aioli, full pan.",                                           photo: "" },
+        { name: "Mini Garlic Tenderloin Sandwiches", price: 185, desc: "With horseradish. 32 half sandwiches.",                                 photo: "" },
+        { name: "Large Fruit & Cheese",              price: 200, desc: "With an assortment of roasted meats.",                                  photo: "" }
+      ]
+    },
+    "salads": {
+      label: "Salads & Sides",
+      items: [
+        { name: "House Salad",               price: 80,  desc: "Iceberg, provel cheese, artichoke hearts, roasted red peppers, housemade croutons, parmesan, sweet zesty Italian.",                                    photo: "" },
+        { name: "Goat Cheese Spinach Salad", price: 100, desc: "Spinach, goat cheese, strawberries, spicy walnuts, red onions, raspberry vinaigrette.",                                                                photo: "" },
+        { name: "Caesar Salad",              price: 85,  desc: "Romaine hearts, housemade croutons, white anchovies, parmesan, mayfair dressing.",                                                                     photo: "" },
+        { name: "Chicken Mediterranean",     price: 100, desc: "Roasted chicken, banana peppers, black olives, mushrooms, roasted red peppers, feta cheese, red onions, cherry tomatoes, sweet zesty Italian.",        photo: "" },
+        { name: "Italian Pasta Salad",       price: 80,  desc: "",                                                                                                                                                     photo: "" },
+        { name: "Country Fresh Green Beans", price: 100, desc: "",                                                                                                                                                     photo: "" },
+        { name: "Medley of Fresh Vegetables",price: 100, desc: "",                                                                                                                                                     photo: "" },
+        { name: "Parmesan Baked Asparagus",  price: 100, desc: "",                                                                                                                    photo: "" }
+      ]
+    },
+    "pasta": {
+      label: "Pasta",
+      items: [
+        { name: "Lasagna",                          price: 125, desc: "1 full pan, feeds 20 people.",                          photo: "" },
+        { name: "Pasta Con Broccoli",               price: 90,  desc: "",                                                      photo: "" },
+        { name: "Rigatoni & Meatballs",             price: 130, desc: "",                                                      photo: "" },
+        { name: "Cannelloni",                       price: 85,  desc: "With meat and cream sauce.",                            photo: "" },
+        { name: "Roasted Chicken Rigatoni",         price: 125, desc: "With tomato basil sauce or white sauce.",               photo: "" },
+        { name: "Rigatoni & Salsiccia",             price: 140, desc: "With meat sauce.",                                      photo: "" },
+        { name: "Rigatoni",                         price: 80,  desc: "With meat sauce or white sauce.",                       photo: "" },
+        { name: "Shrimp with Oil Butter Garlic Rigatoni", price: 125, desc: "",                                                photo: "" },
+        { name: "Beef Ravioli",                     price: 75,  desc: "With meat sauce.",                                      photo: "" },
+        { name: "Manicotti",                        price: 75,  desc: "With tomato basil sauce.",                              photo: "" }
+      ]
+    },
+    "entrees": {
+      label: "Entrées",
+      items: [
+        { name: "Chicken Piccata",                      price: 125,  desc: "With lemon butter sauce.",          photo: "" },
+        { name: "Chicken Parmesan",                     price: 125,  desc: "With tomato basil sauce.",          photo: "" },
+        { name: "Chicken Spiedini",                     price: 140,  desc: "With garlic cream sauce.",          photo: "" },
+        { name: "Herb Rub Half Chickens",               price: 175,  desc: "",                                  photo: "" },
+        { name: "Fried Chicken",                        price: 100,  desc: "Assorted white/dark meat.",         photo: "" },
+        { name: "Garlic Rub Beef Tenderloins",          price: 325,  desc: "With horseradish.",                 photo: "" },
+        { name: "Beef Spiedini",                        price: 275,  desc: "",                                  photo: "" },
+        { name: "Garlic Rub Pork Tenderloin",           price: 160,  desc: "With brown gravy.",                 photo: "" },
+        { name: "Italian Rubbed Double Bone Pork Chops",price: 325,  desc: "With gravy.",                       photo: "" },
+        { name: "Fresh Fish",                           price: 0,    desc: "Grouper, tuna, salmon, tilapia. Market price — contact for quote.", photo: "" }
+      ]
+    },
+    "desserts": {
+      label: "Desserts",
+      items: [
+        { name: "Tiramisu",                       price: 100,  desc: "Full pan, feeds 25. Half pan feeds 12 ($50).",  photo: "" },
+        { name: "Pumpkin Cheesecake",             price: 100,  desc: "Full pan, feeds 25.",                           photo: "" },
+        { name: "Homemade Chocolate Chip Cookies",price: 3.50, desc: "Per each.",                                     photo: "" },
+        { name: "Cannoli",                        price: 3.00, desc: "Per each.",                                     photo: "" }
+      ]
+    },
+    "drinks": {
+      label: "Drinks",
+      items: [
+        { name: "Assorted Sodas",  price: 2, desc: "Coke products. Tea, coffee, juice and ice available upon request.", photo: "" },
+        { name: "Bottled Water",   price: 2, desc: "Per each.",                                                          photo: "" }
+      ]
+    },
+    "addons": {
+      label: "Add-Ons",
+      items: [
+        { name: "Serving Utensils", price: 1.50, desc: "Plastic, per each.", photo: "" },
+        { name: "Silverware",       price: 1.50, desc: "Plastic, per each.", photo: "" },
+        { name: "Plates",           price: 1.50, desc: "Plastic, per each.", photo: "" }
+      ]
+    }
+  };
 
-    function renderMenu() {
-        for (let cat in menuData) {
-            const container = document.getElementById(cat);
-            menuData[cat].forEach(item => {
-                container.innerHTML += `
-                    <div class="food-card">
-                        <div class="food-img">Photo coming soon</div>
-                        <div class="item-name">${item.name}</div>
-                        <div class="item-desc">${item.desc}</div>
-                        <div class="price-tag">$${item.price.toFixed(2)}</div>
-                        <input type="number" class="qty-input menu-item" data-price="${item.price}" value="0" min="0" onchange="calculate()">
-                    </div>`;
-            });
+  const GRID_MAP = {
+    "box-lunches": "grid-box-lunches",
+    "apps":        "grid-apps",
+    "salads":      "grid-salads",
+    "pasta":       "grid-pasta",
+    "entrees":     "grid-entrees",
+    "desserts":    "grid-desserts",
+    "drinks":      "grid-drinks",
+    "addons":      "grid-addons"
+  };
+
+  // ─── RENDER ───────────────────────────────────────────────
+  function renderAll() {
+    // Sandwich tray items (rendered inline, not in MENU object)
+    const sandwichInputs = document.querySelectorAll('[data-cat="sandwich-tray"]');
+    if (sandwichInputs.length) {
+      let sandwichRows = [];
+      sandwichInputs.forEach(input => {
+        const qty = parseInt(input.value) || 0;
+        if (qty > 0) {
+          const sub = qty * parseFloat(input.dataset.price);
+          grandTotal += sub;
+          sandwichRows.push({ name: input.dataset.name, qty: `${qty} guests × $${parseFloat(input.dataset.price).toFixed(2)}/pp`, price: sub });
         }
+      });
+      // Side add-on
+      const assortedQty = parseInt(document.getElementById('qty-sandwich-tray-1')?.value) || 0;
+      if (document.getElementById('assortedSide')?.checked && assortedQty > 0) {
+        const sideTotal = 1.50 * assortedQty;
+        grandTotal += sideTotal;
+        sandwichRows.push({ name: 'Side Add-On (Chips or Italian Pasta Salad)', qty: `${assortedQty} × $1.50/pp`, price: sideTotal });
+      }
+      if (sandwichRows.length) sections.push({ label: 'Sandwich Trays', rows: sandwichRows });
     }
 
-    function calculate() {
-        const bundleSelect = document.getElementById('bundleType');
-        const bundlePrice = parseFloat(bundleSelect.value);
-        const guests = parseInt(document.getElementById('guestCount').value) || 0;
-        const cannoliAddon = document.getElementById('addCannolis').checked ? 2.50 : 0;
-        
-        document.getElementById('bundleDetail').innerText = bundleSelect.options[bundleSelect.selectedIndex].getAttribute('data-desc');
+    for (const key in MENU) {
+      const el = document.getElementById(GRID_MAP[key]);
+      if (!el) continue;
+      el.innerHTML = MENU[key].items.map((item, idx) => `
+        <div class="food-card">
+          ${item.photo
+            ? `<img class="food-photo" src="${item.photo}" alt="${item.name}" loading="lazy" />`
+            : `<div class="photo-placeholder">
+                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2">
+                  <rect x="3" y="3" width="18" height="18" rx="2"/>
+                  <circle cx="8.5" cy="8.5" r="1.5"/>
+                  <polyline points="21 15 16 10 5 21"/>
+                </svg>
+                <span>Photo coming soon</span>
+              </div>`
+          }
+          <div class="card-body">
+            <div class="card-name">${item.name}</div>
+            <div class="card-desc">${item.desc}</div>
+            <div class="card-footer">
+              <div class="card-price">${item.price === 0 ? '<span style="font-size:14px;color:var(--muted);font-family:var(--font-sans);font-weight:500">Market Price</span>' : '$' + item.price.toFixed(2)}</div>
+              ${item.price === 0
+                ? `<button class="qty-btn" style="border-radius:8px;width:auto;padding:0 14px;font-size:13px;font-weight:600;background:var(--red-light);color:var(--red);height:36px;cursor:pointer;" onclick="flagMarketPrice('${item.name}')">Add to Quote</button>`
+                : `<div class="qty-wrap">
+                <button class="qty-btn" onclick="adjustQty('${key}',${idx},-1)">−</button>
+                <input class="qty-num" type="number" id="qty-${key}-${idx}" value="0" min="0"
+                  data-price="${item.price}" data-name="${item.name}" data-cat="${key}"
+                  oninput="calculate()" />
+                <button class="qty-btn" onclick="adjustQty('${key}',${idx},1)">+</button>
+              </div>`}
+            </div>
+          </div>
+        </div>
+      `).join('');
+    }
+  }
 
-        let total = (bundlePrice + cannoliAddon) * guests;
+  // ─── BUNDLE ───────────────────────────────────────────────
+  function onBundleChange(radio) {
+    document.querySelectorAll('.bundle-option').forEach(el => el.classList.remove('active'));
+    radio.closest('.bundle-option').classList.add('active');
+    calculate();
+  }
 
-        document.querySelectorAll('.menu-item').forEach(input => {
-            total += ((parseInt(input.value) || 0) * parseFloat(input.dataset.price));
+  function getBundle() {
+    const checked = document.querySelector('input[name="bundle"]:checked');
+    return checked ? parseFloat(checked.value) : 0;
+  }
+
+  function getBundleName() {
+    const checked = document.querySelector('input[name="bundle"]:checked');
+    if (!checked) return 'A La Carte Only';
+    return checked.closest('.bundle-option').querySelector('.bundle-name').textContent;
+  }
+
+  // ─── CANNOLI ──────────────────────────────────────────────
+  function toggleCannoli() {
+    const cb = document.getElementById('addCannolis');
+    cb.checked = !cb.checked;
+    document.getElementById('cannoli-toggle').classList.toggle('active', cb.checked);
+    calculate();
+  }
+
+  // ─── QTY ──────────────────────────────────────────────────
+  function adjustQty(cat, idx, delta) {
+    const input = document.getElementById(`qty-${cat}-${idx}`);
+    input.value = Math.max(0, (parseInt(input.value) || 0) + delta);
+    calculate();
+  }
+
+  // ─── CALCULATE ────────────────────────────────────────────
+  function calculate() {
+    const bundlePrice = getBundle();
+    const guests = parseInt(document.getElementById('guestCount').value) || 0;
+    const cannoli = document.getElementById('addCannolis').checked ? 2.50 : 0;
+
+    const warn = document.getElementById('guestWarning');
+    warn.style.display = (bundlePrice > 0 && guests > 0 && guests < 10) ? 'block' : 'none';
+
+    let total = (bundlePrice + cannoli) * guests;
+    document.querySelectorAll('[data-price]').forEach(input => {
+      total += (parseInt(input.value) || 0) * parseFloat(input.dataset.price);
+    });
+
+    // Assorted sandwich side add-on
+    const _assortedQty = parseInt(document.getElementById('qty-sandwich-tray-1')?.value) || 0;
+    if (document.getElementById('assortedSide')?.checked && _assortedQty > 0) {
+      total += 1.50 * _assortedQty;
+    }
+
+    document.getElementById('display-total').textContent = `$${total.toFixed(2)}`;
+  }
+
+  // ─── MODAL ────────────────────────────────────────────────
+  function buildQuoteData() {
+    const bundlePrice = getBundle();
+    const guests = parseInt(document.getElementById('guestCount').value) || 0;
+    const cannoli = document.getElementById('addCannolis').checked;
+    let sections = [];
+    let grandTotal = 0;
+
+    if (bundlePrice > 0 && guests > 0) {
+      let rows = [];
+      const s1 = bundlePrice * guests;
+      grandTotal += s1;
+      rows.push({ name: getBundleName(), qty: `${guests} guests × $${bundlePrice}/pp`, price: s1 });
+      if (cannoli) {
+        const s2 = 2.50 * guests;
+        grandTotal += s2;
+        rows.push({ name: "Cannolis (2/person)", qty: `${guests} guests × $2.50/pp`, price: s2 });
+      }
+      sections.push({ label: "Bundle", rows });
+    }
+
+    for (const key in MENU) {
+      let rows = [];
+      MENU[key].items.forEach((item, idx) => {
+        const qty = parseInt(document.getElementById(`qty-${key}-${idx}`)?.value) || 0;
+        if (qty > 0) {
+          const sub = qty * item.price;
+          grandTotal += sub;
+          rows.push({ name: item.name, qty: `${qty} × $${item.price.toFixed(2)}`, price: sub });
+        }
+      });
+      if (rows.length) sections.push({ label: MENU[key].label, rows });
+    }
+
+    // Market price items
+    if (marketPriceItems.size > 0) {
+      const rows = [...marketPriceItems].map(name => ({
+        name, qty: "Market Price — confirm with Tim", price: 0, marketPrice: true
+      }));
+      sections.push({ label: "Market Price Items", rows });
+    }
+
+    return { sections, grandTotal };
+  }
+
+  function openModal() {
+    const { sections, grandTotal } = buildQuoteData();
+    const body = document.getElementById('modal-body');
+
+    if (sections.length === 0) {
+      body.innerHTML = `<div class="empty-order">No items selected yet.<br>Add items to build your quote.</div>`;
+    } else {
+      let html = '';
+      sections.forEach(sec => {
+        html += `<div class="quote-section"><div class="quote-section-label">${sec.label}</div>`;
+        sec.rows.forEach(row => {
+          html += `<div class="quote-row">
+            <span class="quote-row-name">${row.name}</span>
+            <span class="quote-row-qty">${row.qty}</span>
+            <span class="quote-row-price">${row.marketPrice ? '<em style="color:var(--muted);font-size:12px">TBD</em>' : '$' + row.price.toFixed(2)}</span>
+          </div>`;
         });
-        
-        document.getElementById('display-total').innerText = `$${total.toFixed(2)}`;
+        html += `</div>`;
+      });
+      html += `<div class="quote-divider"></div>
+        <div class="quote-total-row">
+          <span class="quote-total-label">Estimated Total</span>
+          <span class="quote-total-amount">$${grandTotal.toFixed(2)}</span>
+        </div>
+        <div class="quote-disclaimer">+ delivery fee &amp; tax not included</div>`;
+      body.innerHTML = html;
     }
 
-    function requestQuote() {
-        window.location.href = `mailto:catering@lilianasitaliankitchen.com?subject=New Catering Request&body=Estimated total: ${document.getElementById('display-total').innerText}.`;
+    document.getElementById('modal-overlay').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeModal() {
+    document.getElementById('modal-overlay').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function handleOverlayClick(e) {
+    if (e.target === document.getElementById('modal-overlay')) closeModal();
+  }
+
+  function sendQuote() {
+    const { sections, grandTotal } = buildQuoteData();
+    let lines = ["=== LILIANA'S CATERING QUOTE REQUEST ===", ""];
+
+    sections.forEach(sec => {
+      lines.push(sec.label.toUpperCase());
+      sec.rows.forEach(r => lines.push(`  ${r.name}  (${r.qty})  =  ${r.marketPrice ? 'Market Price (TBD)' : '$' + r.price.toFixed(2)}`));
+      lines.push("");
+    });
+
+    lines.push("─".repeat(44));
+    lines.push(`ESTIMATED TOTAL: $${grandTotal.toFixed(2)}`);
+    lines.push("(Delivery fees and tax not included)");
+    lines.push("");
+    lines.push("Please confirm availability and provide delivery fee for our location.");
+
+    const body = encodeURIComponent(lines.join("\n"));
+    window.location.href = `mailto:catering@lilianasitaliankitchen.com?subject=Catering Quote Request&body=${body}`;
+    closeModal();
+  }
+
+  // ─── ASSORTED SANDWICH SIDE TOGGLE ───────────────────────────
+  function toggleAssortedSide() {
+    const cb = document.getElementById('assortedSide');
+    cb.checked = !cb.checked;
+    document.getElementById('assorted-side-toggle').classList.toggle('active', cb.checked);
+    calculate();
+  }
+
+  // ─── MARKET PRICE FLAGS ──────────────────────────────────────
+  const marketPriceItems = new Set();
+
+  function flagMarketPrice(name) {
+    if (marketPriceItems.has(name)) {
+      marketPriceItems.delete(name);
+    } else {
+      marketPriceItems.add(name);
     }
-    renderMenu();
+    calculate();
+  }
+
+  // ─── INIT ─────────────────────────────────────────────────
+  renderAll();
 </script>
 </body>
 </html>
