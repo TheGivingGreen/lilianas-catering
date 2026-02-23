@@ -8,116 +8,161 @@
         :root { --liliana-red: #a61e22; --liliana-green: #2e7d32; }
         body { font-family: 'Helvetica Neue', sans-serif; background: #fdfdfd; margin: 0; padding: 20px; }
         .container { max-width: 900px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 10px 40px rgba(0,0,0,0.1); overflow: hidden; border-top: 12px solid var(--liliana-red); }
-        
-        /* Brand Header */
         .brand-header { text-align: center; padding: 40px 20px; background: white; }
         .logo { max-width: 280px; height: auto; margin-bottom: 10px; }
-        
+        .top-info { font-size: 13px; color: #555; line-height: 1.6; margin-bottom: 20px; padding: 0 20px; text-align: center; }
         .menu-section { padding: 30px; border-bottom: 1px solid #eee; }
         .section-title { color: var(--liliana-red); font-size: 24px; border-bottom: 2px solid var(--liliana-red); display: inline-block; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
-        
-        /* Grid for Food Photos */
         .item-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 600px) { .item-grid { grid-template-columns: 1fr; } }
-        
         .food-card { border: 1px solid #eee; border-radius: 12px; padding: 15px; display: flex; flex-direction: column; transition: 0.3s; }
         .food-card:hover { border-color: var(--liliana-red); }
-        .food-img { width: 100%; height: 180px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; background: #f0f0f0; }
-        
+        .food-img { width: 100%; height: 180px; border-radius: 8px; margin-bottom: 10px; background: #f0f0f0; display: flex; align-items: center; justify-content: center; color: #ccc; font-size: 14px; text-align: center; }
         .item-name { font-weight: bold; font-size: 18px; margin-bottom: 5px; }
         .item-desc { font-size: 13px; color: #666; margin-bottom: 10px; flex-grow: 1; }
         .price-tag { color: var(--liliana-red); font-weight: bold; margin-bottom: 10px; font-size: 16px; }
-        
         .qty-input { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 8px; text-align: center; font-size: 16px; }
-        
-        /* Bundle Selector Style */
         .bundle-box { background: #fff8f8; padding: 20px; border-radius: 12px; border: 1px solid #f2d7d7; margin-bottom: 20px; }
         select { width: 100%; padding: 12px; border-radius: 8px; border: 2px solid #ddd; font-size: 16px; margin-top: 10px; }
-
         .sticky-footer { position: sticky; bottom: 0; background: white; border-top: 4px solid var(--liliana-green); padding: 20px; text-align: center; box-shadow: 0 -10px 30px rgba(0,0,0,0.1); }
         .total-amount { font-size: 36px; font-weight: bold; color: var(--liliana-red); margin-bottom: 10px; }
         .btn-order { background: var(--liliana-green); color: white; border: none; padding: 15px 50px; border-radius: 50px; font-size: 20px; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-order:hover { background: #1b5e20; transform: scale(1.02); }
     </style>
 </head>
 <body>
-
 <div class="container">
     <div class="brand-header">
         <img src="https://raw.githubusercontent.com/TheGivingGreen/lilianas-catering/main/Lilnnas%20logoi.jpg" alt="Liliana's Italian Kitchen" class="logo">
-        <p style="font-style: italic; color: #555;">Delivery & Pick-Up Catering Menu Calculator</p>
+        <div class="top-info">
+            <strong>Delivery & Pick-Up Catering Menu</strong><br>
+            Prices reflect portions that serve 25 people (unless stated).<br>
+            Delivery fees apply ($25 minimum). Tax not included.<br>
+            <em>Minimum of 10 people for Bundles.</em>
+        </div>
     </div>
 
     <div class="menu-section">
-        <h2 class="section-title">1. Select a Bundle</h2>
+        <h2 class="section-title">1. Bundles (Min. 10 People)</h2>
         <div class="bundle-box">
-            <label style="font-weight: bold;">Choose your catering package (Min. 10 People):</label>
+            <label style="font-weight: bold;">Select Your Bundle:</label>
             <select id="bundleType" onchange="calculate()">
-                <option value="0">No Bundle (A La Carte Only)</option>
-                <option value="15">Bundle 1 ($15.00/pp) - Sandwich OR Pizza</option>
-                <option value="18">Bundle 2 ($18.00/pp) - Sandwich AND Pizza</option>
-                <option value="21">Bundle 3 ($21.00/pp) - Sandwich, Pizza, AND Pasta</option>
-                <option value="15">Box Lunch ($15.00/ea)</option>
+                <option value="0" data-desc="">A La Carte Only</option>
+                <option value="15" data-desc="Pick Sandwich OR Pizza. (Sandwich: Meadow & Beef Tenderloin mix). Choice of House/Caesar salad & Cheese Bread/Toasted Ravioli.">Bundle 1 ($15.00/pp)</option>
+                <option value="18" data-desc="Pick Sandwich AND Pizza. (Sandwich: Meadow & Beef Tenderloin mix). Choice of House/Caesar salad & Cheese Bread/Toasted Ravioli.">Bundle 2 ($18.00/pp)</option>
+                <option value="21" data-desc="Pick Sandwich, Pizza, AND Pasta. (Sandwich: Meadow & Beef Tenderloin mix). Choice of House/Caesar salad & Cheese Bread/Toasted Ravioli. Pasta: Meat, Tomato Basil, or Cream sauce.">Bundle 3 ($21.00/pp)</option>
             </select>
+            <div id="bundleDetail" style="font-size: 12px; color: #666; margin-top: 5px; font-style: italic;"></div>
+            
             <div style="margin-top: 15px;">
                 <label style="font-weight: bold;">Number of Guests:</label>
-                <input type="number" id="guestCount" class="qty-input" value="0" min="0" onchange="calculate()" style="width: 100px; display: inline-block; margin-left: 10px;">
+                <input type="number" id="guestCount" class="qty-input" value="0" min="0" onchange="calculate()" style="width: 100px; display: inline-block;">
+            </div>
+            
+            <div style="margin-top: 10px;">
+                <input type="checkbox" id="addCannolis" onchange="calculate()"> 
+                <label for="addCannolis" style="font-size: 14px;">Add (2) Cannolis per person (+$2.50/pp)</label>
             </div>
         </div>
     </div>
 
     <div class="menu-section">
-        <h2 class="section-title">2. Sandwiches & Trays</h2>
-        <div class="item-grid" id="sandwiches-list"></div>
+        <h2 class="section-title">2. Box Lunches ($15ea, Min. 10)</h2>
+        <p style="font-size: 13px; margin-bottom: 15px;">Includes side (chips or pasta salad) and cookie.</p>
+        <div class="item-grid" id="box-lunches"></div>
     </div>
 
-    <div class="menu-section">
-        <h2 class="section-title">3. Appetizers</h2>
-        <div class="item-grid" id="apps-list"></div>
-    </div>
+    <div class="menu-section"><h2 class="section-title">3. Appetizers</h2><div class="item-grid" id="apps"></div></div>
 
-    <div class="menu-section">
-        <h2 class="section-title">4. Salads & Sides</h2>
-        <div class="item-grid" id="salads-list"></div>
-    </div>
+    <div class="menu-section"><h2 class="section-title">4. Salads & Sides</h2><div class="item-grid" id="salads-sides"></div></div>
 
-    <div class="menu-section">
-        <h2 class="section-title">5. Pasta & Entrées</h2>
-        <div class="item-grid" id="pasta-list"></div>
-    </div>
+    <div class="menu-section"><h2 class="section-title">5. Pasta (Includes Garlic Bread)</h2><div class="item-grid" id="pastas"></div></div>
 
-    <div class="menu-section">
-        <h2 class="section-title">6. Desserts & Drinks</h2>
-        <div class="item-grid" id="extras-list"></div>
-    </div>
+    <div class="menu-section"><h2 class="section-title">6. Entrées</h2><div class="item-grid" id="entrees"></div></div>
+
+    <div class="menu-section"><h2 class="section-title">7. Desserts, Drinks & Add-Ons</h2><div class="item-grid" id="extras"></div></div>
 
     <div class="sticky-footer">
         <div class="total-amount" id="display-total">$0.00</div>
-        <button class="btn-order" onclick="requestQuote()">Email This Quote</button>
-        <div style="font-size: 11px; color: #888; margin-top: 10px;">*Excludes tax and $25 min delivery fee. Packages serve 25 unless noted.</div>
+        <button class="btn-order" onclick="requestQuote()">Email Quote Request</button>
+        <p style="font-size: 11px; color: #888; margin-top: 10px;">*Delivery fees vary by location ($25 min).</p>
     </div>
 </div>
 
 <script>
     const menuData = {
-        sandwiches: [
-            { name: "Famous Beef Tenderloin", price: 18, desc: "Garlic tenderloin, roasted red peppers, arugula, horsey mayo, cheese garlic bread. (+$3 per box)", img: "" },
-            { name: "The Paulie", price: 15, desc: "Roasted beef, provel, dipped in au jus, garlic mayo, ciabatta.", img: "" },
-            { name: "The Tony", price: 15, desc: "Roasted beef, crispy bacon, sharp cheddar, lettuce, tomato, spicy aioli, ciabatta roll.", img: "" },
-            { name: "The Furio", price: 15, desc: "Roasted beef, giardiniera, roasted red peppers, mozzarella, horseradish mayo, red onion, hoagie.", img: "" },
-            { name: "The Meadow", price: 15, desc: "Roasted turkey, provolone, lettuce, tomato, garlic mayo, seeded hoagie.", img: "" }
+        "box-lunches": [
+            { name: "Famous Beef Tenderloin", price: 18, desc: "Garlic tenderloin, red peppers, arugula, horsey mayo. (+$3 upcharge)" },
+            { name: "Paulie", price: 15, desc: "Roast beef, provel, au jus, garlic mayo, ciabatta." },
+            { name: "The Tony", price: 15, desc: "Roast beef, bacon, cheddar, spicy aioli, ciabatta." },
+            { name: "Furio", price: 15, desc: "Roast beef, giardiniera, red peppers, mozzarella, horseradish mayo." },
+            { name: "Meadow", price: 15, desc: "Turkey, provolone, lettuce, tomato, garlic mayo." }
         ],
-        apps: [
-            { name: "Large Antipasto Tray", price: 200, desc: "Tim's seasonal favorites! Serves 25.", img: "" },
-            { name: "Housemade Meatballs", price: 80, desc: "With meat sauce.", img: "" },
-            { name: "Toasted Ravioli", price: 80, desc: "Full pan with sauce.", img: "" },
-            { name: "Mini Garlic Tenderloin Sandwiches", price: 185, desc: "32 half sandwiches with horseradish.", img: "" }
+        "apps": [
+            { name: "Large Antipasto Tray", price: 200, desc: "Tim's seasonal favorites." },
+            { name: "Italian Bruschetta", price: 80, desc: "Goat cheese, prosciutto, arugula & tomato." },
+            { name: "Housemade Meatballs", price: 80, desc: "With meat sauce." },
+            { name: "Mini Garlic Tenderloin Sandwiches", price: 185, desc: "32 half sandwiches." }
         ],
-        salads: [
-            { name: "House Salad", price: 80, desc: "Iceberg, provel, artichoke, peppers.", img: "" },
-            { name: "Caesar Salad", price: 85, desc: "Romaine, croutons, parmesan.", img: "" },
-            { name: "Goat Cheese Spinach Salad", price: 100, desc: "Strawberry, walnut, raspberry vinaigrette.", img: "" }
+        "salads-sides": [
+            { name: "House Salad", price: 80, desc: "Artichoke, red peppers, zesty Italian." },
+            { name: "Goat Cheese Spinach Salad", price: 100, desc: "Strawberries, walnuts, raspberry vinaigrette." },
+            { name: "Caesar Salad", price: 85, desc: "Romaine, croutons, mayfair dressing." }
         ],
-        pasta: [
-            { name: "Lasagna (Feeds 20)", price: 125, desc: "Full pan. Layers of pasta, meat, and cheese.", img: "" },
-            { name: "Rigatoni & Meatballs", price: 130, desc: "Full pan with meat sauce.", img: "" },
+        "pastas": [
+            { name: "Lasagna", price: 125, desc: "Feeds 20 people." },
+            { name: "Pasta Con Broccoli", price: 90, desc: "Full pan." },
+            { name: "Rigatoni & Meatballs", price: 130, desc: "Full pan." }
+        ],
+        "entrees": [
+            { name: "Chicken Piccata", price: 125, desc: "Lemon butter sauce." },
+            { name: "Chicken Spiedini", price: 140, desc: "Garlic cream sauce." },
+            { name: "Garlic Rub Beef Tenderloins", price: 325, desc: "With horseradish." }
+        ],
+        "extras": [
+            { name: "Tiramisu (Full Pan)", price: 100, desc: "Feeds 25." },
+            { name: "Assorted Soda", price: 2.00, desc: "Coke products." },
+            { name: "Bottled Water", price: 2.00, desc: "Per each." },
+            { name: "Serving Utensils", price: 1.50, desc: "Plastic." }
+        ]
+    };
+
+    function renderMenu() {
+        for (let cat in menuData) {
+            const container = document.getElementById(cat);
+            menuData[cat].forEach(item => {
+                container.innerHTML += `
+                    <div class="food-card">
+                        <div class="food-img">Photo coming soon</div>
+                        <div class="item-name">${item.name}</div>
+                        <div class="item-desc">${item.desc}</div>
+                        <div class="price-tag">$${item.price.toFixed(2)}</div>
+                        <input type="number" class="qty-input menu-item" data-price="${item.price}" value="0" min="0" onchange="calculate()">
+                    </div>`;
+            });
+        }
+    }
+
+    function calculate() {
+        const bundleSelect = document.getElementById('bundleType');
+        const bundlePrice = parseFloat(bundleSelect.value);
+        const guests = parseInt(document.getElementById('guestCount').value) || 0;
+        const cannoliAddon = document.getElementById('addCannolis').checked ? 2.50 : 0;
+        
+        document.getElementById('bundleDetail').innerText = bundleSelect.options[bundleSelect.selectedIndex].getAttribute('data-desc');
+
+        let total = (bundlePrice + cannoliAddon) * guests;
+
+        document.querySelectorAll('.menu-item').forEach(input => {
+            total += ((parseInt(input.value) || 0) * parseFloat(input.dataset.price));
+        });
+        
+        document.getElementById('display-total').innerText = `$${total.toFixed(2)}`;
+    }
+
+    function requestQuote() {
+        window.location.href = `mailto:catering@lilianasitaliankitchen.com?subject=New Catering Request&body=Estimated total: ${document.getElementById('display-total').innerText}.`;
+    }
+    renderMenu();
+</script>
+</body>
+</html>
