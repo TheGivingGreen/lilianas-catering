@@ -3,92 +3,151 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Liliana's Catering Calculator</title>
+    <title>Liliana's Master Catering Calculator</title>
     <style>
-        body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; background-color: #f4f4f4; padding: 20px; display: flex; justify-content: center; }
-        .card { background: white; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); max-width: 600px; width: 100%; border-top: 10px solid #a61e22; }
-        h1 { color: #a61e22; text-align: center; }
-        .section { margin-bottom: 25px; padding-bottom: 15px; border-bottom: 1px solid #eee; }
-        label { font-weight: bold; display: block; margin-bottom: 8px; }
-        input, select { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; margin-bottom: 10px; }
-        .option-row { display: flex; align-items: center; gap: 10px; margin-top: 10px; font-size: 14px; }
-        .option-row input { width: auto; margin: 0; }
-        button { width: 100%; background: #2e7d32; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 18px; font-weight: bold; cursor: pointer; }
-        .quote-box { display: none; margin-top: 25px; padding: 20px; background: #fff8f8; border: 2px solid #a61e22; border-radius: 10px; }
-        .total { font-size: 28px; color: #a61e22; font-weight: bold; text-align: center; }
+        :root { --liliana-red: #a61e22; --liliana-green: #2e7d32; }
+        body { font-family: 'Helvetica Neue', sans-serif; background: #f8f8f8; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; background: white; border-radius: 15px; box-shadow: 0 5px 25px rgba(0,0,0,0.1); overflow: hidden; border-top: 10px solid var(--liliana-red); }
+        .header { text-align: center; padding: 30px; background: #fff; }
+        .header h1 { margin: 0; color: var(--liliana-red); font-size: 28px; }
+        .menu-section { padding: 20px; border-bottom: 1px solid #eee; }
+        .menu-section h2 { color: var(--liliana-red); border-bottom: 2px solid #f4f4f4; padding-bottom: 5px; margin-top: 0; }
+        .item-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px inset #fafafa; }
+        .item-info { flex-grow: 1; }
+        .item-name { font-weight: bold; }
+        .item-desc { font-size: 12px; color: #777; }
+        .qty-controls { display: flex; align-items: center; gap: 10px; }
+        input[type="number"] { width: 60px; padding: 8px; border: 1px solid #ddd; border-radius: 5px; }
+        .sticky-footer { position: sticky; bottom: 0; background: white; padding: 20px; box-shadow: 0 -5px 20px rgba(0,0,0,0.05); border-top: 3px solid var(--liliana-green); text-align: center; }
+        .total-price { font-size: 32px; color: var(--liliana-red); font-weight: bold; margin-bottom: 10px; }
+        .btn-order { background: var(--liliana-green); color: white; border: none; padding: 15px 40px; font-size: 18px; border-radius: 30px; cursor: pointer; font-weight: bold; }
+        .btn-order:hover { background: #1b5e20; }
+        .disclaimer { font-size: 11px; color: #888; margin-top: 10px; }
     </style>
 </head>
 <body>
 
-<div class="card">
-    <h1>Liliana's Catering Assistant</h1>
-    
-    <div class="section">
-        <label>1. Order Type</label>
-        <select id="orderType" onchange="toggleTenderloin()">
-            <option value="bundle1">Bundle 1: Pizza OR Sandwich ($15/pp)</option>
-            <option value="bundle2">Bundle 2: Pizza AND Sandwich ($18/pp)</option>
-            <option value="bundle3">Bundle 3: Pizza, Sandwich, Pasta ($21/pp)</option>
-            <option value="box">Box Lunch ($15.00/each)</option>
-        </select>
+<div class="container">
+    <div class="header">
+        <h1>Liliana's Italian Kitchen</h1>
+        <p>A-to-Z Catering Calculator</p>
     </div>
 
-    <div class="section">
-        <label>2. Number of People (Min 10)</label>
-        <input type="number" id="guestCount" value="10" min="10">
-    </div>
-
-    <div class="section">
-        <label>3. Add-Ons</label>
-        <div class="option-row" id="tenderloinRow" style="display:none;">
-            <input type="checkbox" id="tenderloin"> 
-            <span>Upgrade to Famous Beef Tenderloin (+$3.00/pp)</span>
+    <div class="menu-section">
+        <h2>1. Select a Bundle (Min 10)</h2>
+        <div class="item-row">
+            <div class="item-info">
+                <div class="item-name">Bundle Selection</div>
+                <div class="item-desc">Prices per person</div>
+            </div>
+            <select id="bundleType" onchange="calculate()">
+                <option value="0">No Bundle (A La Carte Only)</option>
+                <option value="15">Bundle 1 ($15.00/pp)</option>
+                <option value="18">Bundle 2 ($18.00/pp)</option>
+                <option value="21">Bundle 3 ($21.00/pp)</option>
+                <option value="15">Box Lunch ($15.00/ea)</option>
+            </select>
         </div>
-        <div class="option-row">
-            <input type="checkbox" id="cannolis"> 
-            <span>Add 2 Cannolis (+$2.50/pp)</span>
+        <div class="item-row">
+            <div class="item-info">
+                <div class="item-name">Number of People</div>
+            </div>
+            <input type="number" id="guestCount" value="0" min="0" onchange="calculate()">
         </div>
     </div>
 
-    <button onclick="getQuote()">Generate Instant Quote</button>
+    <div class="menu-section">
+        <h2>2. Appetizers (Pans serve 25)</h2>
+        <div id="apps-list"></div>
+    </div>
 
-    <div id="quoteBox" class="quote-box">
-        <p id="breakdownText" style="text-align: center; margin-bottom: 5px;"></p>
-        <div class="total" id="totalPrice"></div>
-        <p style="font-size: 11px; color: #777; margin-top: 15px; text-align: center;">
-            *Pricing based on Liliana's Delivery Menu. Excludes tax and delivery ($25 min).
-        </p>
+    <div class="menu-section">
+        <h2>3. Salads & Sides</h2>
+        <div id="salads-list"></div>
+    </div>
+
+    <div class="menu-section">
+        <h2>4. Pasta & Entrées</h2>
+        <div id="pasta-list"></div>
+    </div>
+
+    <div class="menu-section">
+        <h2>5. Desserts</h2>
+        <div id="desserts-list"></div>
+    </div>
+
+    <div class="sticky-footer">
+        <div class="total-price" id="display-total">$0.00</div>
+        <button class="btn-order" onclick="requestQuote()">Email This Quote</button>
+        <div class="disclaimer">*Excludes tax and $25 min delivery fee. Packages serve 25 unless noted.</div>
     </div>
 </div>
 
 <script>
-    function toggleTenderloin() {
-        const type = document.getElementById('orderType').value;
-        document.getElementById('tenderloinRow').style.display = (type === 'box') ? 'flex' : 'none';
+    const menuData = {
+        apps: [
+            { name: "Large Antipasto Tray", price: 200, desc: "Seasonal favorites" },
+            { name: "Housemade Meatballs", price: 80, desc: "With meat sauce" },
+            { name: "Toasted Ravioli", price: 80, desc: "Full pan with sauce" },
+            { name: "Parmesan Lobster Rangoons", price: 80, desc: "Full pan" }
+        ],
+        salads: [
+            { name: "House Salad", price: 80, desc: "Iceberg, provel, artichoke, peppers" },
+            { name: "Caesar Salad", price: 85, desc: "Romaine, croutons, parmesan" },
+            { name: "Goat Cheese Spinach Salad", price: 100, desc: "Strawberry, walnut, red onion" }
+        ],
+        pasta: [
+            { name: "Lasagna (Feeds 20)", price: 125, desc: "Full pan" },
+            { name: "Rigatoni & Meatballs", price: 130, desc: "Full pan" },
+            { name: "Chicken Piccata", price: 125, desc: "With lemon butter" },
+            { name: "Garlic Rub Beef Tenderloins", price: 325, desc: "With horseradish" }
+        ],
+        desserts: [
+            { name: "Tiramisu (Full Pan)", price: 100, desc: "Feeds 25" },
+            { name: "Pumpkin Cheesecake", price: 100, desc: "Feeds 25" },
+            { name: "Cannoli", price: 3, desc: "Per piece" }
+        ]
+    };
+
+    function renderMenu() {
+        for (let cat in menuData) {
+            const container = document.getElementById(`${cat}-list`);
+            menuData[cat].forEach((item, index) => {
+                container.innerHTML += `
+                    <div class="item-row">
+                        <div class="item-info">
+                            <div class="item-name">${item.name}</div>
+                            <div class="item-desc">$${item.price} - ${item.desc}</div>
+                        </div>
+                        <input type="number" class="qty-input" data-price="${item.price}" data-name="${item.name}" value="0" min="0" onchange="calculate()">
+                    </div>`;
+            });
+        }
     }
 
-    function getQuote() {
-        const type = document.getElementById('orderType').value;
-        const guests = parseInt(document.getElementById('guestCount').value);
-        const hasTenderloin = document.getElementById('tenderloin').checked;
-        const hasCannoli = document.getElementById('cannolis').checked;
+    function calculate() {
+        let total = 0;
+        const bundlePrice = parseFloat(document.getElementById('bundleType').value);
+        const guests = parseInt(document.getElementById('guestCount').value) || 0;
         
-        let basePrice = 0;
-        if (type === 'bundle1') basePrice = 15;
-        if (type === 'bundle2') basePrice = 18;
-        if (type === 'bundle3') basePrice = 21;
-        if (type === 'box') basePrice = 15;
+        total += (bundlePrice * guests);
 
-        // Apply Liliana's specific upgrades
-        if (type === 'box' && hasTenderloin) basePrice += 3;
-        if (hasCannoli) basePrice += 2.50;
+        document.querySelectorAll('.qty-input').forEach(input => {
+            const qty = parseInt(input.value) || 0;
+            const price = parseFloat(input.dataset.price);
+            total += (qty * price);
+        });
 
-        const finalTotal = basePrice * guests;
-
-        document.getElementById('breakdownText').innerText = guests + " guests @ $" + basePrice.toFixed(2) + " each";
-        document.getElementById('totalPrice').innerText = "$" + finalTotal.toFixed(2);
-        document.getElementById('quoteBox').style.display = 'block';
+        document.getElementById('display-total').innerText = `$${total.toFixed(2)}`;
     }
+
+    function requestQuote() {
+        const total = document.getElementById('display-total').innerText;
+        const body = `Hi Liliana's! I am interested in a catering order. My estimated total is ${total}. Please contact me to finalize.`;
+        window.location.href = `mailto:catering@lilianasitaliankitchen.com?subject=New Catering Quote Request&body=${encodeURIComponent(body)}`;
+    }
+
+    renderMenu();
 </script>
 
 </body>
