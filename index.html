@@ -786,21 +786,24 @@
   // "https://raw.githubusercontent.com/TheGivingGreen/lilianas-catering/main/YOUR-FILE.jpg"
   // Leave as "" to show the placeholder.
   // ─────────────────────────────────────────────────────────
+  // Base URL for all photos hosted on the main website repo
+  const IMG = "https://raw.githubusercontent.com/TheGivingGreen/lilianas-website/main/images/";
+
   const MENU = {
     "box-lunches": {
       label: "Box Lunches",
       items: [
-        { name: "Famous Beef Tenderloin", price: 18, desc: "Shaved center cut garlic tenderloin, roasted red peppers, arugula, horsey mayo on cheese garlic bread. (+$3 per box)",                    photo: "" },
+        { name: "Famous Beef Tenderloin", price: 18, desc: "Shaved center cut garlic tenderloin, roasted red peppers, arugula, horsey mayo on cheese garlic bread. (+$3 per box)",                    photo: IMG+"beef_tenderloin_sandwich.webp" },
         { name: "Paulie",                 price: 15, desc: "Roasted beef, provel, dipped in au jus, garlic mayo, ciabatta.",                                                                           photo: "" },
         { name: "The Tony",               price: 15, desc: "Roasted beef, crispy bacon, sharp cheddar, lettuce, tomato, spicy aioli, ciabatta roll.",                                                  photo: "" },
         { name: "Furio",                  price: 15, desc: "Roasted beef, giardiniera, roasted red peppers, Italian seasoning, mozzarella, horseradish mayo, red onion, seeded hoagie.",               photo: "" },
-        { name: "Meadow",                 price: 15, desc: "Roasted turkey, provolone, lettuce, tomato, garlic mayo, seeded hoagie.",                                                                  photo: "" },
+        { name: "Meadow",                 price: 15, desc: "Roasted turkey, provolone, lettuce, tomato, garlic mayo, seeded hoagie.",                                                                  photo: IMG+"Meadow.webp" },
         { name: "Adriana",                price: 15, desc: "Roasted turkey, pastrami, crispy bacon, onion, provolone, lettuce, tomato, salsa verde, ciabatta.",                                        photo: "" },
         { name: "Caramela",               price: 15, desc: "Pressed roasted turkey, crispy bacon, fontina, provel, spicy aioli, seeded hoagie.",                                                       photo: "" },
         { name: "Christopher",            price: 15, desc: "Pressed pastrami, swiss, garlic mayo, seeded hoagie.",                                                                                     photo: "" },
-        { name: "Caesar Salad",           price: 15, desc: "Romaine hearts, housemade croutons, white anchovies, parmesan, mayfair dressing. All salads come with roasted chicken.",                  photo: "" },
-        { name: "Goat Cheese Spinach Salad", price: 15, desc: "Spinach, goat cheese, strawberries, spicy walnuts, red onions, raspberry vinaigrette. All salads come with roasted chicken.",          photo: "" },
-        { name: "House Salad",            price: 15, desc: "Iceberg, provel cheese, artichoke hearts, roasted red peppers, housemade croutons, parmesan, sweet zesty Italian. All salads come with roasted chicken.", photo: "" }
+        { name: "Caesar Salad",           price: 15, desc: "Romaine hearts, housemade croutons, white anchovies, parmesan, mayfair dressing. All salads come with roasted chicken.",                  photo: IMG+"Ceaser.webp" },
+        { name: "Goat Cheese Spinach Salad", price: 15, desc: "Spinach, goat cheese, strawberries, spicy walnuts, red onions, raspberry vinaigrette. All salads come with roasted chicken.",          photo: IMG+"goat_Cheese_Spinach.webp" },
+        { name: "House Salad",            price: 15, desc: "Iceberg, provel cheese, artichoke hearts, roasted red peppers, housemade croutons, parmesan, sweet zesty Italian. All salads come with roasted chicken.", photo: IMG+"House_Salad.webp" }
       ]
     },
     "apps": {
@@ -808,54 +811,54 @@
       items: [
         { name: "Large Antipasto Tray",              price: 200, desc: "Tim's seasonal favorites! Ask us for details.",                        photo: "" },
         { name: "Italian Bruschetta",                price: 80,  desc: "Goat cheese, prosciutto, arugula & tomato topping.",                   photo: "" },
-        { name: "Housemade Meatballs",               price: 80,  desc: "With meat sauce.",                                                      photo: "" },
-        { name: "Crispy Parmesan Wings",             price: 80,  desc: "Full pan.",                                                             photo: "" },
+        { name: "Housemade Meatballs",               price: 80,  desc: "With meat sauce.",                                                      photo: IMG+"Homeade_meatballs.webp" },
+        { name: "Crispy Parmesan Wings",             price: 80,  desc: "Full pan.",                                                             photo: IMG+"ParmesianWings.jpg" },
         { name: "Prosciutto Wrapped Asparagus",      price: 100, desc: "Full pan.",                                                             photo: "" },
         { name: "Prosciutto Wrapped Jumbo Shrimp",   price: 175, desc: "Full pan.",                                                             photo: "" },
-        { name: "Fried Artichokes",                  price: 80,  desc: "With sauce, full pan.",                                                 photo: "" },
-        { name: "Toasted Ravioli",                   price: 80,  desc: "With sauce, full pan.",                                                 photo: "" },
-        { name: "Parmesan Lobster Rangoons",         price: 80,  desc: "With spicy aioli, full pan.",                                           photo: "" },
-        { name: "Mini Garlic Tenderloin Sandwiches", price: 185, desc: "With horseradish. 32 half sandwiches.",                                 photo: "" },
+        { name: "Fried Artichokes",                  price: 80,  desc: "With sauce, full pan.",                                                 photo: IMG+"ied_Artichokes.webp" },
+        { name: "Toasted Ravioli",                   price: 80,  desc: "With sauce, full pan.",                                                 photo: IMG+"Toasted_Rav.webp" },
+        { name: "Parmesan Lobster Rangoons",         price: 80,  desc: "With spicy aioli, full pan.",                                           photo: IMG+"obster_rangoon.webp" },
+        { name: "Mini Garlic Tenderloin Sandwiches", price: 185, desc: "With horseradish. 32 half sandwiches.",                                 photo: IMG+"beef_tenderloin_sandwich.webp" },
         { name: "Large Fruit & Cheese",              price: 200, desc: "With an assortment of roasted meats.",                                  photo: "" }
       ]
     },
     "salads": {
       label: "Salads & Sides",
       items: [
-        { name: "House Salad",               price: 80,  desc: "Iceberg, provel cheese, artichoke hearts, roasted red peppers, housemade croutons, parmesan, sweet zesty Italian.",                                    photo: "" },
-        { name: "Goat Cheese Spinach Salad", price: 100, desc: "Spinach, goat cheese, strawberries, spicy walnuts, red onions, raspberry vinaigrette.",                                                                photo: "" },
-        { name: "Caesar Salad",              price: 85,  desc: "Romaine hearts, housemade croutons, white anchovies, parmesan, mayfair dressing.",                                                                     photo: "" },
-        { name: "Chicken Mediterranean",     price: 100, desc: "Roasted chicken, banana peppers, black olives, mushrooms, roasted red peppers, feta cheese, red onions, cherry tomatoes, sweet zesty Italian.",        photo: "" },
-        { name: "Italian Pasta Salad",       price: 80,  desc: "",                                                                                                                                                     photo: "" },
-        { name: "Country Fresh Green Beans", price: 100, desc: "",                                                                                                                                                     photo: "" },
-        { name: "Medley of Fresh Vegetables",price: 100, desc: "",                                                                                                                                                     photo: "" },
-        { name: "Parmesan Baked Asparagus",  price: 100, desc: "",                                                                                                                    photo: "" }
+        { name: "House Salad",               price: 80,  desc: "Iceberg, provel cheese, artichoke hearts, roasted red peppers, housemade croutons, parmesan, sweet zesty Italian.",             photo: IMG+"House_Salad.webp" },
+        { name: "Goat Cheese Spinach Salad", price: 100, desc: "Spinach, goat cheese, strawberries, spicy walnuts, red onions, raspberry vinaigrette.",                                          photo: IMG+"goat_Cheese_Spinach.webp" },
+        { name: "Caesar Salad",              price: 85,  desc: "Romaine hearts, housemade croutons, white anchovies, parmesan, mayfair dressing.",                                               photo: IMG+"Ceaser.webp" },
+        { name: "Chicken Mediterranean",     price: 100, desc: "Roasted chicken, banana peppers, black olives, mushrooms, roasted red peppers, feta cheese, red onions, cherry tomatoes, sweet zesty Italian.", photo: IMG+"Chicken_Mediterainian.webp" },
+        { name: "Italian Pasta Salad",       price: 80,  desc: "",                                                                                                                               photo: IMG+"Side__meat_sauce__pasta.webp" },
+        { name: "Country Fresh Green Beans", price: 100, desc: "",                                                                                                                               photo: "" },
+        { name: "Medley of Fresh Vegetables",price: 100, desc: "",                                                                                                                               photo: "" },
+        { name: "Parmesan Baked Asparagus",  price: 100, desc: "",                                                                                                                               photo: "" }
       ]
     },
     "pasta": {
       label: "Pasta",
       items: [
-        { name: "Lasagna",                          price: 125, desc: "1 full pan, feeds 20 people.",                          photo: "" },
-        { name: "Pasta Con Broccoli",               price: 90,  desc: "",                                                      photo: "" },
-        { name: "Rigatoni & Meatballs",             price: 130, desc: "",                                                      photo: "" },
-        { name: "Cannelloni",                       price: 85,  desc: "With meat and cream sauce.",                            photo: "" },
-        { name: "Roasted Chicken Rigatoni",         price: 125, desc: "With tomato basil sauce or white sauce.",               photo: "" },
-        { name: "Rigatoni & Salsiccia",             price: 140, desc: "With meat sauce.",                                      photo: "" },
-        { name: "Rigatoni",                         price: 80,  desc: "With meat sauce or white sauce.",                       photo: "" },
-        { name: "Shrimp with Oil Butter Garlic Rigatoni", price: 125, desc: "",                                                photo: "" },
+        { name: "Lasagna",                          price: 125, desc: "1 full pan, feeds 20 people.",                          photo: IMG+"Lasagna.webp" },
+        { name: "Pasta Con Broccoli",               price: 90,  desc: "",                                                      photo: IMG+"Chicken_Spedini_RigatoniTom_basil.webp" },
+        { name: "Rigatoni & Meatballs",             price: 130, desc: "",                                                      photo: IMG+"Spagetti_Meatballs.webp" },
+        { name: "Cannelloni",                       price: 85,  desc: "With meat and cream sauce.",                            photo: IMG+"Seafood_Canneloni.webp" },
+        { name: "Roasted Chicken Rigatoni",         price: 125, desc: "With tomato basil sauce or white sauce.",               photo: IMG+"Garlic_Shrimp_Rigatoni_.jpg" },
+        { name: "Rigatoni & Salsiccia",             price: 140, desc: "With meat sauce.",                                      photo: IMG+"Side__meat_sauce__pasta.webp" },
+        { name: "Rigatoni",                         price: 80,  desc: "With meat sauce or white sauce.",                       photo: IMG+"Side__meat_sauce__pasta.webp" },
+        { name: "Shrimp with Oil Butter Garlic Rigatoni", price: 125, desc: "",                                                photo: IMG+"Garlic_Shrimp_Rigatoni_.jpg" },
         { name: "Beef Ravioli",                     price: 75,  desc: "With meat sauce.",                                      photo: "" },
-        { name: "Manicotti",                        price: 75,  desc: "With tomato basil sauce.",                              photo: "" }
+        { name: "Manicotti",                        price: 75,  desc: "With tomato basil sauce.",                              photo: IMG+"Manicotti.webp" }
       ]
     },
     "entrees": {
       label: "Entrées",
       items: [
-        { name: "Chicken Piccata",                      price: 125,  desc: "With lemon butter sauce.",          photo: "" },
-        { name: "Chicken Parmesan",                     price: 125,  desc: "With tomato basil sauce.",          photo: "" },
-        { name: "Chicken Spiedini",                     price: 140,  desc: "With garlic cream sauce.",          photo: "" },
+        { name: "Chicken Piccata",                      price: 125,  desc: "With lemon butter sauce.",          photo: IMG+"Chicken_Parm.webp" },
+        { name: "Chicken Parmesan",                     price: 125,  desc: "With tomato basil sauce.",          photo: IMG+"Chicken_Parm.webp" },
+        { name: "Chicken Spiedini",                     price: 140,  desc: "With garlic cream sauce.",          photo: IMG+"House_Specialty_Chicken_Spedini.webp" },
         { name: "Herb Rub Half Chickens",               price: 175,  desc: "",                                  photo: "" },
         { name: "Fried Chicken",                        price: 100,  desc: "Assorted white/dark meat.",         photo: "" },
-        { name: "Garlic Rub Beef Tenderloins",          price: 325,  desc: "With horseradish.",                 photo: "" },
+        { name: "Garlic Rub Beef Tenderloins",          price: 325,  desc: "With horseradish.",                 photo: IMG+"beef_tenderloin_sandwich.webp" },
         { name: "Beef Spiedini",                        price: 275,  desc: "",                                  photo: "" },
         { name: "Garlic Rub Pork Tenderloin",           price: 160,  desc: "With brown gravy.",                 photo: "" },
         { name: "Italian Rubbed Double Bone Pork Chops",price: 325,  desc: "With gravy.",                       photo: "" },
@@ -865,7 +868,7 @@
     "desserts": {
       label: "Desserts",
       items: [
-        { name: "Tiramisu",                       price: 100,  desc: "Full pan, feeds 25. Half pan feeds 12 ($50).",  photo: "" },
+        { name: "Tiramisu",                       price: 100,  desc: "Full pan, feeds 25. Half pan feeds 12 ($50).",  photo: IMG+"Tiramisu.webp" },
         { name: "Pumpkin Cheesecake",             price: 100,  desc: "Full pan, feeds 25.",                           photo: "" },
         { name: "Homemade Chocolate Chip Cookies",price: 3.50, desc: "Per each.",                                     photo: "" },
         { name: "Cannoli",                        price: 3.00, desc: "Per each.",                                     photo: "" }
